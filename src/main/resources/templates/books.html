@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header}"></head>
+<body class="dark-theme">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h1>Gestión de Libros</h1>
+            <p>Añadir, editar y eliminar libros del catálogo.</p>
+
+            <div class="text-right mb-3">
+                <a href="#" th:href="@{/books/new}" class="btn btn-primary">Añadir Libro</a>
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.getBookId()}">1</td>
+                    <td th:text="${book.getBookName()}">Libro de Ejemplo</td>
+                    <td th:text="${book.getAuthors()}">Autor(es)</td>
+                    <td>
+                        <a href="#" th:href="@{/books/edit/{id}(id=${book.id})}" class="btn btn-sm btn-info">Editar</a>
+                        <a href="#" th:href="@{/books/delete/{id}(id=${book.id})}" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

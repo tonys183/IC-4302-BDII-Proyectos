@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="UTF-8">
+    <title>Librería</title>
+    <link rel="stylesheet" th:href="@{/css/Style.css}">
+</head>
+
+<body class="light-theme">
+
+<nav th:fragment="navbar" class="navbar">
+    <a class="navbar-brand" th:href="@{/}">Librería</a>
+    <div class="navbar-links">
+        <a th:href="@{/books}">Libros</a>
+    </div>
+    <div class="navbar-logout">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-button">Cerrar Sesión</button>
+        </form>
+    </div>
+</nav>
+
+</body>
+</html>

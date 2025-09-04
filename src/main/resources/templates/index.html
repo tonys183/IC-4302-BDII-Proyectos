@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header}"></head>
+<link rel="stylesheet" th:href="@{/css/Index.css}">
+
+<body class="dark-theme">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="App">
+    <div class="main-content" style="text-align: center;">
+        <div class="dashboard-container">
+            <h1>Proyecto I BD II</h1>
+            <p>Sistema de Librería</p>
+        </div>
+
+        <div class="authors">
+            <h3>Desarrollado por:</h3>
+            <div class="author-names">
+                <div class="author-name">Anthony Segura Paniagua</div>
+                <div class="author-name">Gael Ruiz Ñurinda</div>
+                <div class="author-name">Saúl Pacheco Cubillo</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
