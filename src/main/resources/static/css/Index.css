@@ -1,55 +1,115 @@
 .dashboard-container {
-    padding: 2rem;
+    padding: 3rem 2rem;
     text-align: center;
     max-width: 1200px;
     margin: 0 auto;
+    background: var(--dark-glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px var(--shadow-dark);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 20%, rgba(255, 217, 0, 0.05) 0%, transparent 40%);
+    pointer-events: none;
 }
 
 .dashboard-container h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    letter-spacing: -2px;
+    animation: fadeInUp 1s ease-out;
 }
 
 .dashboard-container p {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: var(--text-secondary);
+    margin-bottom: 3rem;
+    font-weight: 400;
+    animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .authors {
-    margin: 0 auto 0;
-    padding: 30px;
-    border-radius: 12px;
-    max-width: 600px;
-    width: 90%;
+    margin: 2rem auto 0;
+    padding: 1rem;
+    max-width: 800px;
+    width: 100%;
+    animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .authors h3 {
     color: var(--text-secondary);
-    font-size: 1.0em;
-    margin-bottom: 20px;
-    letter-spacing: 1px;
+    font-size: 1.1rem;
+    margin-bottom: 1.0rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .author-names {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
 }
 
 .author-name {
-    font-size: 1.5em;
-    font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: 600;
     color: var(--text-primary);
-    padding: 12px 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid rgba(76, 175, 160, 0.3);
-    transition: all 0.3s ease;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    background: var(--bg-card);
+    box-shadow: 0 8px 20px var(--shadow-dark);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
 }
 
+
+
 .author-name:hover {
-    background-color: rgba(76, 172, 175, 0.2);
-    transform: scale(1.05);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container h1 {
+        font-size: 2.5rem;
+    }
+    
+    .author-names {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .authors {
+        padding: 1.5rem;
+    }
 }

@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="header">
+<head th:fragment="header(title)">
     <meta charset="UTF-8">
-    <title>Librería</title>
+    <title th:text="'Librería - ' + ${title}">Librería</title>
     <link rel="stylesheet" th:href="@{/css/Style.css}">
 </head>
 
 <body class="light-theme">
 
 <nav th:fragment="navbar" class="navbar">
-    <a class="navbar-brand" th:href="@{/}">Librería</a>
-    <div class="navbar-links">
-        <a th:href="@{/books}">Libros</a>
+    <div class="navbar-left">
+        <a class="navbar-brand" th:href="@{/}">Librería</a>
+        <div class="navbar-links">
+            <a th:href="@{/books}">Libros</a>
+        </div>
     </div>
     <div class="navbar-logout">
         <form th:action="@{/logout}" method="post">

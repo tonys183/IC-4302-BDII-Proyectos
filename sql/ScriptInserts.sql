@@ -12,3 +12,23 @@ INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VAL
 
 --- Insert User ---
 INSERT INTO Library_User (username, password) VALUES ('tonyseg', '$2a$10$yHD/RKGZIxAODSVK.RgREuhkt3DJZLgptbEZ3FxHwiat.VR9caJE2');
+
+
+--- Test ---
+INSERT INTO Publisher (publisher_name)
+VALUES ('Penguin Books');
+
+INSERT INTO Book (book_name, ISBN, publisher_id)
+VALUES ('Cien Años de Soledad', '9780307474728', 1);
+
+INSERT INTO Author (author_name)
+VALUES ('Gabriel García Márquez');
+
+INSERT INTO Book_Author (book_id, author_id)
+VALUES (1, 1);
+
+INSERT INTO Genre (genre_name)
+VALUES ('Realismo Mágico');
+
+INSERT INTO Genre_Book (genre_id, book_id)
+VALUES (1, 1);

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: header}"></head>
+<head th:replace="~{fragments :: header(title='Libros')}"></head>
+<link rel="stylesheet" th:href="@{/css/Book.css}">
 <body class="dark-theme">
 
 <nav th:replace="~{fragments :: navbar}"></nav>
@@ -11,7 +12,7 @@
             <h1>Gestión de Libros</h1>
             <p>Añadir, editar y eliminar libros del catálogo.</p>
 
-            <div class="text-right mb-3">
+            <div>
                 <a href="#" th:href="@{/books/new}" class="btn btn-primary">Añadir Libro</a>
             </div>
 
@@ -20,18 +21,21 @@
                 <tr>
                     <th>ID</th>
                     <th>Título</th>
-                    <th>Autor</th>
+                    <th>Autor(es)</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="book : ${books}">
-                    <td th:text="${book.getBookId()}">1</td>
-                    <td th:text="${book.getBookName()}">Libro de Ejemplo</td>
-                    <td th:text="${book.getAuthors()}">Autor(es)</td>
+                    <td th:text="${book.bookId}">1</td>
+                    <td th:text="${book.bookName}">Libro de Ejemplo</td>
                     <td>
-                        <a href="#" th:href="@{/books/edit/{id}(id=${book.id})}" class="btn btn-sm btn-info">Editar</a>
-                        <a href="#" th:href="@{/books/delete/{id}(id=${book.id})}" class="btn btn-sm btn-danger">Eliminar</a>
+                        <span th:each="author, iterStat : ${book.authors}" th:text="${author.author_name} + (${iterStat.last} ? '' : ', ')"></span>
+                    </td>
+                    <td>
+                        <a th:href="@{/books/edit/{id}(id=${book.bookId})}" class="btn btn-sm btn-info">Editar</a>
+                        <a th:href="@{/books/delete/{id}(id=${book.bookId})}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Estás seguro de que quieres eliminar este libro?');">Eliminar</a>
                     </td>
                 </tr>
                 </tbody>
