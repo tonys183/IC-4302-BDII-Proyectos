@@ -17,10 +17,10 @@ public class Book {
     @Column(name = "book_id")
     private int bookId;
 
-    @Column(name = "book_name")
+    @Column(name = "book_name", nullable = false)
     private String bookName;
 
-    @Column(name = "ISBN")
+    @Column(name = "ISBN", nullable = false, unique = true)
     private String isbn;
 
     @ManyToOne

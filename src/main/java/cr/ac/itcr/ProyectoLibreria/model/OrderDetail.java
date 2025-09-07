@@ -8,12 +8,14 @@ import java.util.Date;
 @Entity
 @Table(name = "OrderDetail")
 public class OrderDetail {
-    @EmbeddedId
-    private OrderDetailId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_detail_id")
+    private int orderDetailId;
 
     @ManyToOne
     @MapsId("orderId")
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private CustomerOrder customerOrder;
 
     @ManyToOne
@@ -31,15 +33,12 @@ public class OrderDetail {
     @JoinColumn(name = "service_id")
     private Service service;
 
-    @Column(name = "date_detail")
+    @Column(name = "date_detail", nullable = false)
     private Date dateDetail;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "unit_price")
+    @Column(name = "unit_price", nullable = false)
     private double unitPrice;
-
-    @Column(name = "total_detail")
-    private double totalDetail;
 }

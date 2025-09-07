@@ -12,10 +12,10 @@ public class Service {
     @Column(name = "service_id")
     private int serviceId;
 
-    @Column(name = "service_name")
+    @Column(name = "service_name", nullable = false)
     private String serviceName;
 
     @ManyToOne
-    @JoinColumn(name = "type_id")
+    @JoinColumn(name = "type_id", nullable = false)
     private ServiceType type;
 }

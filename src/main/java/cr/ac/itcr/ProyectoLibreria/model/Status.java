@@ -12,6 +12,6 @@ public class Status {
     @Column(name = "status_id")
     private int statusId;
 
-    @Column(name = "status_name")
+    @Column(name = "status_name", nullable = false, unique = true)
     private String statusName;
 }

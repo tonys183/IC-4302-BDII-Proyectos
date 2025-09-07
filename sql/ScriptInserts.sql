@@ -21,8 +21,8 @@ VALUES ('Penguin Books');
 INSERT INTO Book (book_name, ISBN, publisher_id)
 VALUES ('Cien Años de Soledad', '9780307474728', 1);
 
-INSERT INTO Author (author_name)
-VALUES ('Gabriel García Márquez');
+INSERT INTO Author (first_name, last_name1, last_name2)
+VALUES ('Gabriel', 'García', 'Márquez');
 
 INSERT INTO Book_Author (book_id, author_id)
 VALUES (1, 1);

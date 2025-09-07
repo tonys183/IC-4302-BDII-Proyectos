@@ -12,9 +12,9 @@ public class Supply {
     @Column(name = "supply_id")
     private int supplyId;
 
-    @Column(name = "supply_name")
+    @Column(name = "supply_name", nullable = false, unique = true)
     private String supplyName;
 
-    @Column(name = "stock")
+    @Column(name = "stock", nullable = false)
     private int stock;
 }

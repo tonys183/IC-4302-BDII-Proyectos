@@ -12,6 +12,6 @@ public class ServiceType {
     @Column(name = "type_id")
     private int typeId;
 
-    @Column(name = "type_name")
+    @Column(name = "type_name", nullable = false, unique = true)
     private String typeName;
 }

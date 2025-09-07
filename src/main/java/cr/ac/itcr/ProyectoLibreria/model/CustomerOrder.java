@@ -13,17 +13,14 @@ public class CustomerOrder {
     @Column(name = "order_id")
     private int orderId;
 
-    @Column(name = "order_date")
+    @Column(name = "order_date", nullable = false)
     private Date orderDate;
 
-    @Column(name = "total_price")
-    private double totalPrice;
-
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private Status status;
 }

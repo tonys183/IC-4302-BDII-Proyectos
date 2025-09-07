@@ -17,7 +17,7 @@ public class Genre {
     @Column(name = "genre_id")
     private int genreId;
 
-    @Column(name = "genre_name")
+    @Column(name = "genre_name", nullable = false, unique = true)
     private String genreName;
 
     @ManyToMany(mappedBy = "genres")
