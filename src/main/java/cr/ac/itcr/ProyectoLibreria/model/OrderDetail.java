@@ -14,25 +14,22 @@ public class OrderDetail {
     private int orderDetailId;
 
     @ManyToOne
-    @MapsId("orderId")
     @JoinColumn(name = "order_id", nullable = false)
     private CustomerOrder customerOrder;
 
     @ManyToOne
-    @MapsId("supplyId")
     @JoinColumn(name = "supply_id")
     private Supply supply;
 
     @ManyToOne
-    @MapsId("bookId")
     @JoinColumn(name = "book_id")
     private Book book;
 
     @ManyToOne
-    @MapsId("serviceId")
     @JoinColumn(name = "service_id")
     private Service service;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "date_detail", nullable = false)
     private Date dateDetail;
 

@@ -18,14 +18,18 @@ public class Author {
     private long author_id;
 
     @Column(name = "first_name", nullable = false)
-    private String first_name;
+    private String firstName;
 
     @Column(name = "last_name1", nullable = false)
-    private String last_name1;
+    private String lastName1;
 
     @Column(name = "last_name2")
-    private String last_name2;
+    private String lastName2;
 
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books;
+
+    public String getFullName() {
+        return firstName + ' ' + lastName1 + ' ' + (lastName2 == null ? "" : lastName2);
+    }
 }

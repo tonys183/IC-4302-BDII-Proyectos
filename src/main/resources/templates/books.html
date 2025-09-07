@@ -30,7 +30,7 @@
                     <td th:text="${book.bookId}">1</td>
                     <td th:text="${book.bookName}">Libro de Ejemplo</td>
                     <td>
-                        <span th:each="author, iterStat : ${book.authors}" th:text="${author.author_name} + (${iterStat.last} ? '' : ', ')"></span>
+                        <span th:each="author, iterStat : ${book.authors}" th:text="${author.getFullName()} + (${iterStat.last} ? '' : ', ')"></span>
                     </td>
                     <td>
                         <a th:href="@{/books/edit/{id}(id=${book.bookId})}" class="btn btn-sm btn-info">Editar</a>

@@ -11,7 +11,7 @@ INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VAL
 INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Paola', 'Vega', 'Méndez', '88890123', 'paola.vega@email.com');
 
 --- Insert User ---
-INSERT INTO Library_User (username, password) VALUES ('tonyseg', '$2a$10$yHD/RKGZIxAODSVK.RgREuhkt3DJZLgptbEZ3FxHwiat.VR9caJE2');
+INSERT INTO Library_User (username, password) VALUES ('tonyseg', '$2a$10$ONqRkS.SNJMr1AERLIHlguAMn0.AvvFipl9f8IcZ2xytlP50S4B5S');
 
 
 --- Test ---
@@ -32,3 +32,5 @@ VALUES ('Realismo Mágico');
 
 INSERT INTO Genre_Book (genre_id, book_id)
 VALUES (1, 1);
+
+COMMIT;

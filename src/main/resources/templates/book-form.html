@@ -39,7 +39,7 @@
                     <select id="authors" th:field="*{authors}" class="form-control" multiple required>
                         <option th:each="author : ${authors}"
                                 th:value="${author.author_id}"
-                                th:text="${author.author_name}">Autor</option>
+                                th:text="${author.getFullName()}">Autor</option>
                     </select>
                 </div>
 
