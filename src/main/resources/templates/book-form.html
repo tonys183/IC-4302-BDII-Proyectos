@@ -9,7 +9,7 @@
     <div class="main-content">
         <div class="dashboard-container">
             <h1 th:text="${book.bookId == 0 ? 'Añadir Nuevo Libro' : 'Editar Libro'}">Título del Formulario</h1>
-            <p>Rellena los detalles del libro.</p>
+            <p>Agregar los detalles de un libro nuevo.</p>
 
             <form th:action="@{/books}" th:object="${book}" method="post" class="book-form">
                 <input type="hidden" th:field="*{bookId}" />
@@ -36,7 +36,8 @@
 
                 <div class="form-group">
                     <label for="authors">Autor(es)</label>
-                    <select id="authors" th:field="*{authors}" class="form-control" multiple required>
+                    <small style="display:block;margin-bottom:6px;">Mantener Ctrl para quitar o seleccionar múltiples autores.</small>
+                    <select id="authors" th:field="*{authors}" class="form-control" multiple size="6">
                         <option th:each="author : ${authors}"
                                 th:value="${author.author_id}"
                                 th:text="${author.getFullName()}">Autor</option>
@@ -45,7 +46,8 @@
 
                 <div class="form-group">
                     <label for="genres">Género(s)</label>
-                    <select id="genres" th:field="*{genres}" class="form-control" multiple required>
+                    <small style="display:block;margin-bottom:6px;">Mantener Ctrl para quitar o seleccionar múltiples géneros.</small>
+                    <select id="genres" th:field="*{genres}" class="form-control" multiple size="6">
                         <option th:each="genre : ${genres}"
                                 th:value="${genre.genreId}"
                                 th:text="${genre.genreName}">Género</option>

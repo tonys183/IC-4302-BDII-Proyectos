@@ -100,23 +100,19 @@ body {
 .btn-info {
     background: linear-gradient(45deg, #74b9ff, #0984e3);
     color: white;
-    box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
 }
 
 .btn-info:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(116, 185, 255, 0.4);
 }
 
 .btn-danger {
     background: linear-gradient(45deg, #ff6b6b, #e17055);
     color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
 }
 
 .btn-danger:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
 }
 
 .btn-sm {
@@ -561,4 +557,16 @@ select[multiple] {
     margin-top: 2rem;
     border-top: 1px solid var(--border-color);
     padding-top: 1.5rem;
+}
+
+.book-form #publisher {
+  background-color: #3f3f3f;
+  color: var(--text-primary);
+  border: 1px solid var(--input-border);
+}
+
+.book-form #publisher:focus {
+  background-color: #3f3f3f;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
 }

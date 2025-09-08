@@ -8,8 +8,8 @@ import java.util.Set;
 
 @Data
 @Entity
-@ToString(exclude = "genres")
-@EqualsAndHashCode(exclude = "genres")
+@ToString(exclude = "books")
+@EqualsAndHashCode(exclude = "books")
 @Table(name = "Genre")
 public class Genre {
     @Id
@@ -21,5 +21,5 @@ public class Genre {
     private String genreName;
 
     @ManyToMany(mappedBy = "genres")
-    private Set<Book> genres;
+    private Set<Book> books;
 }

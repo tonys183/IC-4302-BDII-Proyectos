@@ -10,7 +10,7 @@
     <div class="main-content">
         <div class="dashboard-container">
             <h1>Gestión de Libros</h1>
-            <p>Añadir, editar y eliminar libros del catálogo.</p>
+            <p>Añadir, editar y eliminar libros.</p>
 
             <div>
                 <a href="#" th:href="@{/books/new}" class="btn btn-primary">Añadir Libro</a>
@@ -19,18 +19,22 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Título</th>
+                    <th>Editorial</th>
                     <th>Autor(es)</th>
+                    <th>Género(s)</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="book : ${books}">
-                    <td th:text="${book.bookId}">1</td>
                     <td th:text="${book.bookName}">Libro de Ejemplo</td>
+                    <td th:text="${book.publisher != null ? book.publisher.publisherName : '—'}">Editorial</td>
                     <td>
                         <span th:each="author, iterStat : ${book.authors}" th:text="${author.getFullName()} + (${iterStat.last} ? '' : ', ')"></span>
+                    </td>
+                    <td>
+                        <span th:each="genre, iterStat : ${book.genres}" th:text="${genre.genreName} + (${iterStat.last} ? '' : ', ')"></span>
                     </td>
                     <td>
                         <a th:href="@{/books/edit/{id}(id=${book.bookId})}" class="btn btn-sm btn-info">Editar</a>
