@@ -121,7 +121,7 @@ CREATE TABLE Log_Table (
 );
 
 CREATE OR REPLACE TRIGGER trg_log_order_quantity
-    AFTER UPDATE OF quantity ON OrderDetail
+    AFTER INSERT OR UPDATE OF quantity ON OrderDetail
         FOR EACH ROW
     DECLARE
     v_username VARCHAR2(30);

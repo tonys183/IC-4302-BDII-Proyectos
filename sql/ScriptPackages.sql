@@ -170,23 +170,33 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
 
     --- Create customer order ---
     PROCEDURE create_customer_order(
-        p_client_id IN Client.client_id%TYPE,
+        p_first_name IN Client.first_name%TYPE,
+        p_last_name1 IN Client.last_name1%TYPE,
         p_status_name IN Status.status_name%TYPE,
         p_order_date IN DATE DEFAULT SYSDATE,
         p_order_id OUT CustomerOrder.order_id%TYPE
     )
     IS
+        v_client_id Client.client_id%TYPE;
         v_status_id Status.status_id%TYPE;
     BEGIN
+        SELECT client_id INTO v_client_id FROM Client
+        WHERE first_name = p_first_name AND last_name1 = p_last_name1;
+
         SELECT status_id INTO v_status_id FROM Status
         WHERE status_name = p_status_name;
 
         INSERT INTO CustomerOrder (order_date, client_id, status_id)
-        VALUES (p_order_date, p_client_id, v_status_id)
+        VALUES (p_order_date, v_client_id, v_status_id)
         RETURNING order_id INTO p_order_id;
 
         COMMIT;
+
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE('No se encontró cliente con nombre: ' || p_first_name || ' ' || p_last_name1);
     END;
+
 END pkg_modifications;
 /
 
