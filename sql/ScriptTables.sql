@@ -120,6 +120,37 @@ CREATE TABLE Log_Table (
     FOREIGN KEY (user_id) REFERENCES Library_User(user_id)
 );
 
+CREATE OR REPLACE TRIGGER trg_log_order_quantity
+    AFTER UPDATE OF quantity ON OrderDetail
+        FOR EACH ROW
+    DECLARE
+    v_username VARCHAR2(30);
+        v_user_id  NUMBER;
+    BEGIN
+        v_username := SYS_CONTEXT('USERENV', 'SESSION_USER');
+
+    SELECT user_id
+    INTO v_user_id
+    FROM Library_User
+    WHERE username = v_username;
+
+    INSERT INTO Log_Table (
+        user_id,
+        action,
+        action_date,
+        current_value,
+        previous_value
+    )
+    VALUES (
+               v_user_id,
+               'UPDATE ORDER QUANTITY',
+               SYSDATE,
+               :NEW.quantity,
+               :OLD.quantity
+           );
+    END;
+/
+
 DROP TABLE Log_Table CASCADE CONSTRAINTS;
 DROP TABLE OrderDetail CASCADE CONSTRAINTS;
 DROP TABLE Book_Author CASCADE CONSTRAINTS;
