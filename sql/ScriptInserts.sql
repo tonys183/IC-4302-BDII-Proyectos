@@ -84,6 +84,23 @@ INSERT INTO ServiceType (type_name) VALUES ('Encuadernación');
 INSERT INTO ServiceType (type_name) VALUES ('Entrega a domicilio');
 INSERT INTO ServiceType (type_name) VALUES ('Reserva de productos');
 
+--- Insert Service ---
+BEGIN
+    DECLARE
+    temp Service.service_id%TYPE;
+    BEGIN
+    temp := pkg_modifications.insert_service('Fotocopiado blanco y negro', 'Fotocopiado');
+    temp := pkg_modifications.insert_service('Fotocopiado a color', 'Fotocopiado');
+    temp := pkg_modifications.insert_service('Impresión blanco y negro', 'Impresión');
+    temp := pkg_modifications.insert_service('Impresión a color', 'Impresión');
+    temp := pkg_modifications.insert_service('Encuadernación térmica', 'Encuadernación');
+    temp := pkg_modifications.insert_service('Entrega local', 'Entrega a domicilio');
+    temp := pkg_modifications.insert_service('Entrega nacional', 'Entrega a domicilio');
+    temp := pkg_modifications.insert_service('Reserva de libros', 'Reserva de productos');
+    temp := pkg_modifications.insert_service('Reserva de útiles escolares', 'Reserva de productos');
+    END;
+END;
+
 --- Insert Book ---
 BEGIN
     DECLARE
@@ -131,7 +148,6 @@ BEGIN
     pkg_modifications.add_genre_to_book('Cuento', 'El Aleph');
     pkg_modifications.add_genre_to_book('Realismo Mágico', 'Cien Años de Soledad');
 END;
-/
 
 
 /*=== TABLAS TRANSCACIONALES ===*/

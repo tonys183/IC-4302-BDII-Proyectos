@@ -3,6 +3,7 @@ package cr.ac.itcr.ProyectoLibreria.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,4 +24,7 @@ public class CustomerOrder {
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
+
+    @OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderDetail> orderDetails;
 }

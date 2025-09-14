@@ -17,6 +17,10 @@
         p_ISBN IN Book.ISBN%TYPE,
         p_publisher_name IN publisher.publisher_name%TYPE
     ) RETURN Book.book_id%TYPE;
+    FUNCTION insert_service (
+        p_service_name IN Service.service_name%TYPE,
+        p_type_name IN ServiceType.type_name%TYPE
+    ) RETURN Service.service_id%TYPE;
 END pkg_modifications;
 /
 
@@ -107,7 +111,6 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         RETURN NULL;
     END insert_book;
 
-
     --- Link Author to Book ---
     PROCEDURE add_author_to_book(
         p_first_name IN VARCHAR2,
@@ -161,8 +164,9 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
                 RETURNING genre_id INTO v_genre_id;
         END;
         BEGIN
-        INSERT INTO Genre_Book (genre_id, book_id)
-        VALUES (v_genre_id, v_book_id);
+            INSERT INTO Genre_Book (genre_id, book_id) VALUES (v_genre_id, v_book_id);
+            COMMIT;
+
         EXCEPTION
             WHEN DUP_VAL_ON_INDEX THEN NULL;
         END;
@@ -189,13 +193,41 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         INSERT INTO CustomerOrder (order_date, client_id, status_id)
         VALUES (p_order_date, v_client_id, v_status_id)
         RETURNING order_id INTO p_order_id;
-
         COMMIT;
 
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
             DBMS_OUTPUT.PUT_LINE('No se encontró cliente con nombre: ' || p_first_name || ' ' || p_last_name1);
     END;
+
+    --- Insert service ---
+    FUNCTION insert_service(
+        p_service_name IN Service.service_name%TYPE,
+        p_type_name IN ServiceType.type_name%TYPE
+    ) RETURN Service.service_id%TYPE IS
+        v_service_id Service.service_id%TYPE;
+        v_type_id ServiceType.type_id%TYPE;
+    BEGIN
+        BEGIN
+            SELECT type_id INTO v_type_id
+            FROM ServiceType
+            WHERE type_name = p_type_name;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                INSERT INTO ServiceType (type_name) VALUES (p_type_name)
+                RETURNING type_id INTO v_type_id;
+        END;
+
+        INSERT INTO Service (service_name, type_id) VALUES (p_service_name, v_type_id)
+        RETURNING service_id INTO v_service_id;
+        RETURN v_service_id;
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            RETURN NULL;
+        WHEN OTHERS THEN
+            RETURN NULL;
+    END insert_service;
 
 END pkg_modifications;
 /

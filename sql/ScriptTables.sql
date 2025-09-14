@@ -129,9 +129,7 @@ CREATE OR REPLACE TRIGGER trg_log_order_quantity
     BEGIN
         v_username := SYS_CONTEXT('USERENV', 'SESSION_USER');
 
-    SELECT user_id
-    INTO v_user_id
-    FROM Library_User
+    SELECT user_id INTO v_user_id FROM Library_User
     WHERE username = v_username;
 
     INSERT INTO Log_Table (

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header(title='Detalles de Orden')}"></head>
+<link rel="stylesheet" th:href="@{/css/Order.css}">
+<body class="dark-theme order-details">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h1>Detalles de Orden #<span th:text="${order.orderId}">1</span></h1>
+            <p>Cliente: <span th:text="${order.client?.firstName}">Cliente</span> | 
+               Fecha: <span th:text="${order.orderDate}">01/01/2024</span> | 
+               Estado: <span th:text="${order.status?.statusName}">Estado</span></p>
+
+            <div class="order-info">
+                <a th:href="@{/orders}" class="btn btn-details">Volver a Órdenes</a>
+            </div>
+
+            <div class="add-detail-section">
+                <h3>Añadir Item a la Orden</h3>
+                <form th:action="@{/orders/{id}/details(id=${order.orderId})}" method="post" class="detail-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemType">Tipo de Item</label>
+                            <select id="itemType" name="itemType" class="form-control" required onchange="showItemSelect()">
+                                <option value="">Selecciona tipo</option>
+                                <option value="book">Libro</option>
+                                <option value="supply">Suministro</option>
+                                <option value="service">Servicio</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="bookGroup" style="display: none;">
+                            <label for="bookId">Libro</label>
+                            <select id="bookId" name="bookId" class="form-control">
+                                <option value="">Selecciona un libro</option>
+                                <option th:each="book : ${books}" th:value="${book.bookId}" th:text="${book.bookName}">Libro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="supplyGroup" style="display: none;">
+                            <label for="supplyId">Suministro</label>
+                            <select id="supplyId" name="supplyId" class="form-control">
+                                <option value="">Selecciona un suministro</option>
+                                <option th:each="supply : ${supplies}" th:value="${supply.supplyId}" th:text="${supply.supplyName}">Suministro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="serviceGroup" style="display: none;">
+                            <label for="serviceId">Servicio</label>
+                            <select id="serviceId" name="serviceId" class="form-control">
+                                <option value="">Selecciona un servicio</option>
+                                <option th:each="service : ${services}" th:value="${service.serviceId}" th:text="${service.serviceName}">Servicio</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Cantidad</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" min="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="unitPrice">Precio Unitario</label>
+                            <input type="number" id="unitPrice" name="unitPrice" class="form-control" step="0.01" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Añadir Item</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="details-section">
+                <h3>Items en la Orden</h3>
+                <table class="table" th:if="${orderDetails != null and !orderDetails.isEmpty()}">
+                    <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Item</th>
+                        <th>Fecha</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="detail : ${orderDetails}">
+                        <td>
+                            <span th:if="${detail.book != null}" class="badge badge-book">Libro</span>
+                            <span th:if="${detail.supply != null}" class="badge badge-supply">Suministro</span>
+                            <span th:if="${detail.service != null}" class="badge badge-service">Servicio</span>
+                        </td>
+                        <td>
+                            <span th:if="${detail.book != null}" th:text="${detail.book?.bookName}">Libro</span>
+                            <span th:if="${detail.supply != null}" th:text="${detail.supply?.supplyName}">Suministro</span>
+                            <span th:if="${detail.service != null}" th:text="${detail.service?.serviceName}">Servicio</span>
+                        </td>
+                        <td th:text="${detail.dateDetail}">01/01/2024</td>
+                        <td th:text="${detail.quantity}">1</td>
+                        <td th:text="${detail.unitPrice}">0.00</td>
+                        <td th:text="${detail.quantity * detail.unitPrice}">0.00</td>
+                        <td>
+                            <a th:href="@{/orders/{orderId}/details/edit/{detailId}(orderId=${order.orderId}, detailId=${detail.orderDetailId})}" 
+                               class="btn btn-sm btn-info">Editar</a>
+                            <a th:href="@{/orders/{orderId}/details/delete/{detailId}(orderId=${order.orderId}, detailId=${detail.orderDetailId})}" 
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('¿Estás seguro de que quieres eliminar este item?');">Eliminar</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div th:if="${orderDetails == null or orderDetails.empty}" class="no-items">
+                    <p>No hay items en esta orden.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/order-details.js}"></script>
+
+</body>
+</html>

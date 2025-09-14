@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header(title='Órdenes de Cliente')}"></head>
+<link rel="stylesheet" th:href="@{/css/Order.css}">
+<body class="dark-theme">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h1>Gestión de Órdenes</h1>
+            <p>Añadir, editar y eliminar órdenes de cliente.</p>
+
+            <div>
+                <a href="#" th:href="@{/orders/new}" class="btn btn-primary">Añadir Orden</a>
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Detalles</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.orderId}">1</td>
+                    <td th:text="${order.orderDate}">01/01/2024</td>
+                    <td th:text="${order.client?.firstName}">Cliente</td>
+                    <td th:text="${order.status?.statusName}">Estado</td>
+                    <td>0 items</td>
+                    <td>
+                        <a th:href="@{/orders/{id}/details(id=${order.orderId})}" class="btn btn-sm btn-details">Ver Detalles</a>
+                        <a th:href="@{/orders/edit/{id}(id=${order.orderId})}" class="btn btn-sm btn-info">Editar</a>
+                        <a th:href="@{/orders/delete/{id}(id=${order.orderId})}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Estás seguro de que quieres eliminar esta orden?');">Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
