@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header(title='Reportes')}"></head>
+<link rel="stylesheet" th:href="@{/css/Order.css}">
+<body class="dark-theme">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h1>Reportes del Sistema</h1>
+            <p>Análisis y estadísticas de ventas y clientes.</p>
+
+            <div class="reports-section">
+                <h3>Seleccionar Reporte</h3>
+                <div class="report-buttons">
+                    <a href="/admin/reports/high-spending-clients" class="btn btn-primary report-btn">Clientes de Alto Gasto</a>
+                    <a href="/admin/reports/client-books" class="btn btn-primary report-btn">Libros por Cliente</a>
+                    <a href="/admin/reports/book-sales" class="btn btn-primary report-btn">Ventas de Libros</a>
+                </div>
+            </div>
+
+            <div th:if="${results != null and !results.isEmpty()}" class="results-section">
+                <h3>Resultados del Reporte</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th th:each="header : ${results[0].keySet()}" th:text="${header}">Columna</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="row : ${results}">
+                            <td th:each="value : ${row.values()}" th:text="${value}">Valor</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${results != null and results.isEmpty()}" class="no-results">
+                <div class="no-data-message">
+                    <h4>Sin datos disponibles</h4>
+                    <p>No hay datos para mostrar en este reporte.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

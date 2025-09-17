@@ -27,6 +27,10 @@ public class Client {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public String getFullName() {
         return firstName + ' ' + lastName1 + ' ' + (lastName2 == null ? "" : lastName2);
     }

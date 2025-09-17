@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: header(title='Catálogo')}"></head>
+<link rel="stylesheet" th:href="@{/css/Order.css}">
+<link rel="stylesheet" th:href="@{/css/Book.css}">
+
+<body class="dark-theme">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h1>Catálogo de Productos</h1>
+            <p>Explora nuestro catálogo completo de libros, servicios y útiles disponibles.</p>
+
+            <div class="search-section">
+                <form id="searchForm" method="get" action="/catalog">
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <label for="type">Tipo de Producto</label>
+                            <select id="type" name="type" class="product-type-select" onchange="submitForm()">
+                                <option value="books" th:selected="${type == 'books'}">Libros</option>
+                                <option value="services" th:selected="${type == 'services'}">Servicios</option>
+                                <option value="supplies" th:selected="${type == 'supplies'}">Útiles</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" th:if="${currentType == 'books'}">
+                            <label for="search">Buscar por título o ISBN</label>
+                            <input type="text" id="search" name="search" 
+                                   th:value="${search}" placeholder="Ingresa título o ISBN"
+                                   oninput="debounceSearch()">
+                        </div>
+                        <div class="filter-group" th:if="${currentType == 'books'}">
+                            <label for="genre">Género</label>
+                            <input type="text" id="genre" name="genre" 
+                                   th:value="${genre}" placeholder="Filtrar por género"
+                                   oninput="debounceSearch()">
+                        </div>
+                        <div class="filter-group" th:if="${currentType == 'books'}">
+                            <label for="author">Autor</label>
+                            <input type="text" id="author" name="author" 
+                                   th:value="${author}" placeholder="Filtrar por autor"
+                                   oninput="debounceSearch()">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="books-results" th:if="${currentType == 'books'}">
+                <div th:if="${#lists.isEmpty(books)}" class="no-results">
+                    <h4>No se encontraron libros</h4>
+                    <p>Intenta ajustar los filtros de búsqueda o <a href="/catalog">ver todos los libros</a></p>
+                </div>
+                
+                <div class="catalog-cards" th:if="${!#lists.isEmpty(books)}">
+                    <div class="product-card" th:each="book : ${books}">
+                        <div class="card-header">
+                            <h3 th:text="${book.bookName}">Título del Libro</h3>
+                            <span class="badge badge-book">Libro</span>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>ISBN:</strong> <span th:text="${book.isbn}">ISBN</span></p>
+                            <p><strong>Editorial:</strong> <span th:text="${book.publisher?.publisherName ?: 'No especificada'}">Editorial</span></p>
+                            <p><strong>Autor(es):</strong> 
+                                <span th:each="author, iterStat : ${book.authors}" 
+                                      th:text="${author.firstName + ' ' + author.lastName1 + (author.lastName2 != null ? ' ' + author.lastName2 : '')} + (${iterStat.last} ? '' : ', ')"></span>
+                            </p>
+                            <p><strong>Género(s):</strong> 
+                                <span th:each="genre, iterStat : ${book.genres}" 
+                                      th:text="${genre.genreName} + (${iterStat.last} ? '' : ', ')"></span>
+                            </p>
+                        </div>
+                        <div class="card-actions">
+                            <form th:action="@{/catalog/add-to-order}" method="post" style="display: inline;">
+                                <input type="hidden" name="bookId" th:value="${book.bookId}">
+                                <input type="hidden" name="itemType" value="book">
+                                <input type="number" name="quantity" value="1" min="1" max="10" placeholder="Cantidad" class="quantity-input">
+                                <button type="submit" class="btn btn-primary">Agregar a Orden</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${currentType == 'services'}">
+                <div th:if="${#lists.isEmpty(services)}" class="no-results">
+                    <h4>No se encontraron servicios</h4>
+                    <p>Intenta ajustar los filtros de búsqueda o <a href="/catalog?type=services">ver todos los servicios</a></p>
+                </div>
+                
+                <div class="catalog-cards" th:if="${!#lists.isEmpty(services)}">
+                    <div class="product-card" th:each="service : ${services}">
+                        <div class="card-header">
+                            <h3 th:text="${service.serviceName}">Nombre del Servicio</h3>
+                            <span class="badge badge-service">Servicio</span>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>Tipo:</strong> <span th:text="${service.type?.typeName ?: 'No especificado'}">Tipo de Servicio</span></p>
+                        </div>
+                        <div class="card-actions">
+                            <form th:action="@{/catalog/add-to-order}" method="post" style="display: inline;">
+                                <input type="hidden" name="serviceId" th:value="${service.serviceId}">
+                                <input type="hidden" name="itemType" value="service">
+                                <input type="number" name="quantity" value="1" min="1" max="10" placeholder="Cantidad" class="quantity-input">
+                                <button type="submit" class="btn btn-primary">Agregar a Orden</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${currentType == 'supplies'}">
+                <div th:if="${#lists.isEmpty(supplies)}" class="no-results">
+                    <h4>No se encontraron útiles</h4>
+                    <p>Intenta ajustar los filtros de búsqueda o <a href="/catalog?type=supplies">ver todos los útiles</a></p>
+                </div>
+                
+                <div class="catalog-cards" th:if="${!#lists.isEmpty(supplies)}">
+                    <div class="product-card" th:each="supply : ${supplies}">
+                        <div class="card-header">
+                            <h3 th:text="${supply.supplyName}">Nombre del Útil</h3>
+                            <span class="badge badge-supply">Útil</span>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>Stock disponible:</strong> <span th:text="${supply.stock}">0</span> unidades</p>
+                            <p th:if="${supply.stock > 0}" class="stock-available">Disponible</p>
+                            <p th:if="${supply.stock == 0}" class="stock-unavailable">Agotado</p>
+                        </div>
+                        <div class="card-actions">
+                            <form th:action="@{/catalog/add-to-order}" method="post" style="display: inline;" th:if="${supply.stock > 0}">
+                                <input type="hidden" name="supplyId" th:value="${supply.supplyId}">
+                                <input type="hidden" name="itemType" value="supply">
+                                <input type="number" name="quantity" value="1" min="1" th:max="${supply.stock}" placeholder="Cantidad" class="quantity-input">
+                                <button type="submit" class="btn btn-primary">Agregar a Orden</button>
+                            </form>
+                            <span class="btn btn-disabled" th:if="${supply.stock == 0}">
+                                Agotado
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/catalog.js}"></script>
+
+</body>
+</html>

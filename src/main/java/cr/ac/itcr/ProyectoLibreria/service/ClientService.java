@@ -4,7 +4,6 @@ import cr.ac.itcr.ProyectoLibreria.model.Client;
 import cr.ac.itcr.ProyectoLibreria.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +27,9 @@ public class ClientService {
 
     public void deleteById(Integer id) {
         clientRepository.deleteById(id);
+    }
+
+    public Client findByUsername(String username) {
+        return clientRepository.findByUserUsername(username);
     }
 }

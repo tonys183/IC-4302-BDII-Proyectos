@@ -90,7 +90,6 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
             WHERE publisher_name = p_publisher_name;
         EXCEPTION
             WHEN NO_DATA_FOUND THEN
-                -- Si no existe, lo insertamos
                 INSERT INTO Publisher (publisher_name)
                 VALUES (p_publisher_name)
                 RETURNING publisher_id INTO v_publisher_id;
@@ -243,7 +242,7 @@ END pkg_queries;
 CREATE OR REPLACE PACKAGE BODY pkg_queries AS
 
     --- Show book details
-    PROCEDURE showBookDetails IS
+    PROCEDURE show_book_details IS
     BEGIN
         FOR book IN (
             SELECT b.book_id, b.book_name, b.ISBN, a.first_name, a.last_name1, a.last_name2, p.publisher_name
@@ -263,8 +262,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_queries AS
         END LOOP;
     END showBookDetails;
 
-    --- Get order count by user email ---
-    FUNCTION getOrderCountByUser(user_mail IN VARCHAR2) RETURN NUMBER
+    --- Get order count user
+    FUNCTION get_order_count_user(user_mail IN VARCHAR2) RETURN NUMBER
     IS
     v_order_count NUMBER;
 

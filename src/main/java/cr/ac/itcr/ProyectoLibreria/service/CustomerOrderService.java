@@ -4,7 +4,6 @@ import cr.ac.itcr.ProyectoLibreria.model.CustomerOrder;
 import cr.ac.itcr.ProyectoLibreria.repository.CustomerOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +27,9 @@ public class CustomerOrderService {
 
     public void deleteById(Integer id) {
         customerOrderRepository.deleteById(id);
+    }
+
+    public List<CustomerOrder> findByClientId(int clientId) {
+        return customerOrderRepository.findByClientClientId(clientId);
     }
 }

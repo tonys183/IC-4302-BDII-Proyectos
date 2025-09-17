@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header(title='Editar Item de Orden')}"></head>
+<link rel="stylesheet" th:href="@{/css/Order.css}">
+<body class="dark-theme">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h1>Editar Item de Orden</h1>
+            <p>Modificar la cantidad del item seleccionado.</p>
+
+            <div class="form-section">
+                <form th:action="@{/orders/{orderId}/details/update/{detailId}(orderId=${order.orderId}, detailId=${orderDetail.orderDetailId})}" 
+                      th:object="${orderDetail}" method="post" class="order-form">
+                    
+                    <div class="form-group">
+                        <label for="itemDisplay">Item:
+                            <span th:if="${orderDetail.book != null}" class="badge badge-book">Libro</span>
+                            <span th:if="${orderDetail.supply != null}" class="badge badge-supply">Suministro</span>
+                            <span th:if="${orderDetail.service != null}" class="badge badge-service">Servicio</span>
+                        </label>
+
+                        <div class="form-control" id="itemDisplay" style="background-color: #2a2a2a; border: 1px solid #444; padding: 8px 12px; border-radius: 4px; margin-top: 15px;">
+                            <div>
+                                <span th:if="${orderDetail.book != null}" th:text="${orderDetail.book?.bookName}">Libro</span>
+                                <span th:if="${orderDetail.supply != null}" th:text="${orderDetail.supply?.supplyName}">Suministro</span>
+                                <span th:if="${orderDetail.service != null}" th:text="${orderDetail.service?.serviceName}">Servicio</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Cantidad:</label>
+                        <input type="number" id="quantity" th:field="*{quantity}" class="form-control" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="unitPrice">Precio Unitario:</label>
+                        <input type="number" id="unitPrice" th:field="*{unitPrice}" class="form-control" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <a th:href="@{/orders/{orderId}/details(orderId=${order.orderId})}" class="btn btn-danger">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

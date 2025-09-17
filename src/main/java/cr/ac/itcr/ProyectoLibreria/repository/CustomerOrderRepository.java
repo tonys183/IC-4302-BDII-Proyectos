@@ -20,4 +20,6 @@ public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, In
     @Query("SELECT co FROM CustomerOrder co LEFT JOIN FETCH co.client LEFT JOIN FETCH co.status LEFT JOIN FETCH co.orderDetails WHERE co.orderId = :id")
     @NonNull
     Optional<CustomerOrder> findById(@NonNull Integer id);
+
+    List<CustomerOrder> findByClientClientId(int clientId);
 }

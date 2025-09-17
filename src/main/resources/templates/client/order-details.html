@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: header(title='Detalles de Orden')}"></head>
+<link rel="stylesheet" th:href="@{/css/Order.css}">
+
+<body class="dark-theme">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h1>Detalles de la Orden #<span th:text="${order.orderId}">1</span></h1>
+            <p>Cliente: <span th:text="${order.client.firstName + ' ' + order.client.lastName1}">Cliente</span> | 
+               Fecha: <span th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy')}">01/01/2024</span> | 
+               Estado: <span th:text="${order.status.statusName}">Estado</span></p>
+
+            <div class="details-section">
+                <h3>Items en la Orden</h3>
+                <table class="table" th:if="${order.orderDetails != null and !order.orderDetails.isEmpty()}">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Item</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="detail : ${order.orderDetails}">
+                            <td>
+                                <span th:if="${detail.book != null}" class="badge badge-book">Libro</span>
+                                <span th:if="${detail.service != null}" class="badge badge-service">Servicio</span>
+                                <span th:if="${detail.supply != null}" class="badge badge-supply">Útil</span>
+                            </td>
+                            <td>
+                                <span th:if="${detail.book != null}" th:text="${detail.book.bookName}">Título del Libro</span>
+                                <span th:if="${detail.service != null}" th:text="${detail.service.serviceName}">Nombre del Servicio</span>
+                                <span th:if="${detail.supply != null}" th:text="${detail.supply.supplyName}">Nombre del Útil</span>
+                            </td>
+                            <td th:text="${detail.quantity}">1</td>
+                            <td>$<span th:text="${#numbers.formatDecimal(detail.unitPrice, 1, 2)}">$0.00</span></td>
+                            <td>$<span th:text="${#numbers.formatDecimal(detail.quantity * detail.unitPrice, 1, 2)}">$0.00</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${order.orderDetails == null or order.orderDetails.isEmpty()}" class="no-items">
+                    <p>No hay items en esta orden.</p>
+                </div>
+
+                <div th:if="${!#lists.isEmpty(order.orderDetails)}" class="order-summary">
+                    <div class="total-section">
+                        <strong class="total-text">Total de la Orden: $<span th:text="${#numbers.formatDecimal(#aggregates.sum(order.orderDetails.![quantity * unitPrice]), 1, 2)}">$0.00</span></strong>
+                    </div>
+                    <div class="order-actions">
+                        <a th:href="@{/catalog/my-orders}" class="btn btn-continue">Volver a Mis Órdenes</a>
+                        <a th:href="@{/catalog}" class="btn btn-finalize">Continuar Comprando</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

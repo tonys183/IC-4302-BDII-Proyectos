@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: header(title='Crear Orden')}"></head>
+<link rel="stylesheet" th:href="@{/css/Order.css}">
+
+<body class="dark-theme">
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h1>Crear Nueva Orden</h1>
+            <p>Agrega libros a tu orden y finalízala cuando estés listo.</p>
+
+            <div th:if="${!#lists.isEmpty(orderItems)}" class="order-items-section">
+                <h3>Items en tu Orden</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item, iterStat : ${orderItems}">
+                            <td>
+                                <span th:if="${item.book != null}" th:text="${item.book.bookName}">Título del Libro</span>
+                                <span th:if="${item.service != null}" th:text="${item.service.serviceName}">Nombre del Servicio</span>
+                                <span th:if="${item.supply != null}" th:text="${item.supply.supplyName}">Nombre del Útil</span>
+                            </td>
+                            <td th:text="${item.quantity}">1</td>
+                            <td>$<span th:text="${#numbers.formatDecimal(item.unitPrice, 1, 2)}">$0.00</span></td>
+                            <td>$<span th:text="${#numbers.formatDecimal(item.quantity * item.unitPrice, 1, 2)}">$0.00</span></td>
+                            <td>
+                                <a th:href="@{/catalog/remove-from-order(itemId=${iterStat.index})}" 
+                                   class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="order-summary">
+                    <div class="total-section">
+                        <strong class="total-text">Total: $<span th:text="${#numbers.formatDecimal(orderItems.size() * 25.0, 1, 2)}">$0.00</span></strong>
+                    </div>
+                    <div class="order-actions">
+                        <a th:href="@{/catalog}" class="btn btn-continue">Continuar Comprando</a>
+                        <a th:href="@{/catalog/finalize-order}" class="btn btn-finalize">Finalizar Orden</a>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(orderItems)}" class="no-items">
+                <h4 class="empty-order-title">Tu orden está vacía</h4>
+                <p class="empty-order-text">Ve al catálogo para agregar libros a tu orden.</p>
+                <a th:href="@{/catalog}" class="btn btn-primary">Ver Catálogo</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

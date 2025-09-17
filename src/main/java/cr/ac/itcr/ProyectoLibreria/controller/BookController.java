@@ -1,14 +1,12 @@
 package cr.ac.itcr.ProyectoLibreria.controller;
 
-import cr.ac.itcr.ProyectoLibreria.model.Author;
 import cr.ac.itcr.ProyectoLibreria.model.Book;
-import cr.ac.itcr.ProyectoLibreria.model.Genre;
-import cr.ac.itcr.ProyectoLibreria.model.Publisher;
 import cr.ac.itcr.ProyectoLibreria.service.AuthorService;
 import cr.ac.itcr.ProyectoLibreria.service.BookService;
 import cr.ac.itcr.ProyectoLibreria.service.GenreService;
 import cr.ac.itcr.ProyectoLibreria.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,19 +27,29 @@ public class BookController {
     private GenreService genreService;
 
     @GetMapping
-    public String listBooks(Model model) {
+    public String listBooks(Model model, Authentication authentication) {
         List<Book> books = bookService.findAll();
         model.addAttribute("books", books);
-        return "books";
+
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+        
+        return "admin/books";
     }
 
     @GetMapping("/new")
-    public String showBookForm(Model model) {
+    public String showBookForm(Model model, Authentication authentication) {
         model.addAttribute("book", new Book());
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("publishers", publisherService.findAll());
         model.addAttribute("genres", genreService.findAll());
-        return "book-form";
+
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+        
+        return "admin/book-form";
     }
 
     @PostMapping
@@ -51,13 +59,18 @@ public class BookController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model) {
+    public String showEditForm(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         Book book = bookService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
         model.addAttribute("book", book);
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("publishers", publisherService.findAll());
         model.addAttribute("genres", genreService.findAll());
-        return "book-form";
+
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+        
+        return "admin/book-form";
     }
 
     @GetMapping("/delete/{id}")

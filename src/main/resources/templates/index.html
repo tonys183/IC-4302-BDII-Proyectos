@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments :: header(title='Inicio')}"></head>
 <link rel="stylesheet" th:href="@{/css/Index.css}">
 
@@ -12,14 +12,28 @@
             <h1>Proyecto I BD II</h1>
             <p>Sistema de Librería</p>
 
-        <div class="authors">
-            <h3>Desarrollado por:</h3>
-            <div class="author-names">
-                <div class="author-name">Gael Ruiz Ñurinda</div>
-                <div class="author-name">Saúl Pacheco Cubillo</div>
-                <div class="author-name">Anthony Segura Paniagua</div>
+            <div class="authors">
+                <h3>Desarrollado por:</h3>
+                <div class="author-names">
+                    <div class="author-name">Gael Ruiz Ñurinda</div>
+                    <div class="author-name">Saúl Pacheco Cubillo</div>
+                    <div class="author-name">Anthony Segura Paniagua</div>
+                </div>
             </div>
         </div>
+
+        <div th:if="${isAdmin}" class="admin-panel">
+            <h2>Panel de Administración</h2>
+            <p>Bienvenido, administrador. Desde aquí puedes gestionar todos los aspectos del sistema.</p>
+
+            <div class="system-info">
+                <h4>Información del Sistema</h4>
+                <div class="info-list">
+                    <div><strong>Versión:</strong> 1.0.0</div>
+                    <div><strong>Base de Datos:</strong> Oracle</div>
+                    <div><strong>Framework:</strong> Spring Boot</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

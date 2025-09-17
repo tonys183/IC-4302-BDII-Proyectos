@@ -1,27 +1,27 @@
 /*=== ENTIDADES FUERTES ===*/
---- Insert Client ---
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Gael', 'Ruiz', 'Ñurinda', '88881234', 'gael.ruiz@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Anthony', 'Segura', 'Paniagua', '88882345', 'anthony.segura@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Saúl', 'Pacheco', 'Cubillo', '88883456', 'saul.pacheco@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Lucía', 'García', 'Vargas', '88884567', 'lucia.garcia@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Miguel', 'Hernández', 'Pacheco', '88885678', 'miguel.hernandez@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Sofía', 'Cruz', 'Rojas', '88886789', 'sofia.cruz@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Diego', 'Jiménez', 'Flores', '88887890', 'diego.jimenez@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('María', 'Ortiz', 'Castro', '88888901', 'maria.ortiz@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Fernando', 'Ramírez', 'Soto', '88889012', 'fernando.ramirez@email.com');
-INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email) VALUES ('Paola', 'Vega', 'Méndez', '88890123', 'paola.vega@email.com');
-
 --- Insert User ---
-INSERT INTO Library_User (username, password) VALUES ('tonyseg', '$2a$10$ONqRkS.SNJMr1AERLIHlguAMn0.AvvFipl9f8IcZ2xytlP50S4B5S');
-INSERT INTO Library_User (username, password) VALUES ('saulpa', '$2a$10$KvycGTnb4KNrLoTBjOrmWeXQY/a2pcxEaci8TZK/OjnbmZDmUc1si');
-INSERT INTO Library_User (username, password) VALUES ('gruiz', '$2a$10$uUFd4xKh3d51UYG7tEQ/ues7TWdXhXUOpIzr14olteK/89kcEKYci');
-INSERT INTO Library_User (username, password) VALUES ('maria.lopez', '$2a$10$8YDkxBE52yG133hydXg99O4Xxf4ZkBlKlyDWIDsOV.NE8PNVW0eZq');
-INSERT INTO Library_User (username, password) VALUES ('carlos_m', '$2a$10$WFXaeby92XuJqAeTjHGkkumRwMkMYSXZLPcCWX9EUtPfsWZb7cIX.');
-INSERT INTO Library_User (username, password) VALUES ('laura_91', '$2a$10$paNFsNz32hEjXZX/MHG0yeRAkpuVvOuX6FSqkTxeRf30DQD98qAv.');
-INSERT INTO Library_User (username, password) VALUES ('pedroG', '$2a$10$SQ/x95FeYRgLQ.yBgTL31OZshNWZLKKSTog6g5504tVVjptokxBbi');
-INSERT INTO Library_User (username, password) VALUES ('sofia_r', '$2a$10$YA/a7FdcyGOuq6XNP/ddzOcEE4JzwA1cRWSajADzRFRN1TQP5O7N2');
-INSERT INTO Library_User (username, password) VALUES ('miguel23', '$2a$10$h.jVQairCGcjFNoevwXq.ewzzyyL53GGUZvBLoIKrd08yp93Q/CS.');
-INSERT INTO Library_User (username, password) VALUES ('valentina', '$2a$10$Avy/EEvA5eRO81Ie0MxgROTn0DDNYCNUaNpkUNbeP65GrLbH46RjC');
+INSERT INTO Library_User (username, password, role) VALUES ('gael.ruiz', '$2a$10$uUFd4xKh3d51UYG7tEQ/ues7TWdXhXUOpIzr14olteK/89kcEKYci', 'ADMIN');
+INSERT INTO Library_User (username, password, role) VALUES ('anthony.segura', '$2a$10$ONqRkS.SNJMr1AERLIHlguAMn0.AvvFipl9f8IcZ2xytlP50S4B5S', 'ADMIN');
+INSERT INTO Library_User (username, password, role) VALUES ('saul.pacheco', '$2a$10$KvycGTnb4KNrLoTBjOrmWeXQY/a2pcxEaci8TZK/OjnbmZDmUc1si', 'ADMIN');
+INSERT INTO Library_User (username, password, role) VALUES ('lucia.garcia', '$2a$10$8YDkxBE52yG133hydXg99O4Xxf4ZkBlKlyDWIDsOV.NE8PNVW0eZq', 'CLIENT');
+INSERT INTO Library_User (username, password, role) VALUES ('miguel.hernandez', '$2a$10$WFXaeby92XuJqAeTjHGkkumRwMkMYSXZLPcCWX9EUtPfsWZb7cIX.', 'CLIENT');
+INSERT INTO Library_User (username, password, role) VALUES ('sofia.cruz', '$2a$10$paNFsNz32hEjXZX/MHG0yeRAkpuVvOuX6FSqkTxeRf30DQD98qAv.', 'CLIENT');
+INSERT INTO Library_User (username, password, role) VALUES ('diego.jimenez', '$2a$10$SQ/x95FeYRgLQ.yBgTL31OZshNWZLKKSTog6g5504tVVjptokxBbi', 'CLIENT');
+INSERT INTO Library_User (username, password, role) VALUES ('maria.ortiz', '$2a$10$YA/a7FdcyGOuq6XNP/ddzOcEE4JzwA1cRWSajADzRFRN1TQP5O7N2', 'CLIENT');
+INSERT INTO Library_User (username, password, role) VALUES ('fernando.ramirez', '$2a$10$h.jVQairCGcjFNoevwXq.ewzzyyL53GGUZvBLoIKrd08yp93Q/CS.', 'CLIENT');
+INSERT INTO Library_User (username, password, role) VALUES ('paola.vega', '$2a$10$Avy/EEvA5eRO81Ie0MxgROTn0DDNYCNUaNpkUNbeP65GrLbH46RjC', 'CLIENT');
+
+--- Insert Client ---
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Gael', 'Ruiz', 'Ñurinda', '88881234', 'gael.ruiz@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'gael.ruiz'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Anthony', 'Segura', 'Paniagua', '88882345', 'anthony.segura@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'anthony.segura'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Saúl', 'Pacheco', 'Cubillo', '88883456', 'saul.pacheco@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'saul.pacheco'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Lucía', 'García', 'Vargas', '88884567', 'lucia.garcia@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'lucia.garcia'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Miguel', 'Hernández', 'Pacheco', '88885678', 'miguel.hernandez@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'miguel.hernandez'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Sofía', 'Cruz', 'Rojas', '88886789', 'sofia.cruz@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'sofia.cruz'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Diego', 'Jiménez', 'Flores', '88887890', 'diego.jimenez@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'diego.jimenez'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('María', 'Ortiz', 'Castro', '88888901', 'maria.ortiz@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'maria.ortiz'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Fernando', 'Ramírez', 'Soto', '88889012', 'fernando.ramirez@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'fernando.ramirez'));
+INSERT INTO Client (first_name, last_name1, last_name2, phone_number, email, user_id) VALUES ('Paola', 'Vega', 'Méndez', '88890123', 'paola.vega@gmail.com', (SELECT user_id FROM Library_User WHERE username = 'paola.vega'));
 
 --- Insert Publisher ---
 INSERT INTO Publisher (publisher_name) VALUES ('Penguin Books');

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="header(title)">
     <meta charset="UTF-8">
     <title th:text="'Librería - ' + ${title}">Librería</title>
@@ -12,8 +12,12 @@
     <div class="navbar-left">
         <a class="navbar-brand" th:href="@{/}">Librería</a>
         <div class="navbar-links">
-            <a th:href="@{/books}">Libros</a>
-            <a th:href="@{/orders}">Órdenes</a>
+            <a th:href="@{/books}" class="admin-link" th:style="${isAdmin} ? 'display: inline;' : 'display: none;'">Libros</a>
+            <a th:href="@{/orders}" class="admin-link" th:style="${isAdmin} ? 'display: inline;' : 'display: none;'">Órdenes</a>
+            <a th:href="@{/admin/reports}" class="admin-link" th:style="${isAdmin} ? 'display: inline;' : 'display: none;'">Reportes</a>
+            <a th:href="@{/catalog}" class="client-link" th:style="${isAdmin} ? 'display: none;' : 'display: inline;'">Catálogo</a>
+            <a th:href="@{/catalog/create-order}" class="client-link" th:style="${isAdmin} ? 'display: none;' : 'display: inline;'">Crear Orden</a>
+            <a th:href="@{/catalog/my-orders}" class="client-link" th:style="${isAdmin} ? 'display: none;' : 'display: inline;'">Mis Órdenes</a>
         </div>
     </div>
     <div class="navbar-logout">

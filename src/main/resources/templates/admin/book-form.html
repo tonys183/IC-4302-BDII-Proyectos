@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: header(title=${book.bookId == 0 ? 'Añadir Libro' : 'Editar Libro'})}"></head>
+<link rel="stylesheet" th:href="@{/css/Book.css}">
 <body class="dark-theme">
 
 <nav th:replace="~{fragments :: navbar}"></nav>

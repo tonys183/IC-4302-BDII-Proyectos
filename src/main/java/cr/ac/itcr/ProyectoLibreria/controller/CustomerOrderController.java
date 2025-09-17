@@ -3,6 +3,7 @@ package cr.ac.itcr.ProyectoLibreria.controller;
 import cr.ac.itcr.ProyectoLibreria.model.*;
 import cr.ac.itcr.ProyectoLibreria.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,18 +31,28 @@ public class CustomerOrderController {
     private ServiceService serviceService;
 
     @GetMapping
-    public String listOrders(Model model) {
+    public String listOrders(Model model, Authentication authentication) {
         List<CustomerOrder> orders = customerOrderService.findAll();
         model.addAttribute("orders", orders);
-        return "orders";
+
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+        
+        return "admin/orders";
     }
 
     @GetMapping("/new")
-    public String showOrderForm(Model model) {
+    public String showOrderForm(Model model, Authentication authentication) {
         model.addAttribute("order", new CustomerOrder());
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("statuses", statusService.findAll());
-        return "order-form";
+
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+        
+        return "admin/order-form";
     }
 
     @PostMapping
@@ -54,13 +65,18 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model) {
+    public String showEditForm(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         CustomerOrder order = customerOrderService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid order Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + id));
         model.addAttribute("order", order);
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("statuses", statusService.findAll());
-        return "order-form";
+
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+        
+        return "admin/order-form";
     }
 
     @GetMapping("/delete/{id}")
@@ -70,9 +86,9 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/{id}/details")
-    public String showOrderDetails(@PathVariable("id") Integer id, Model model) {
+    public String showOrderDetails(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         CustomerOrder order = customerOrderService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid order Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + id));
         List<OrderDetail> orderDetails = orderDetailService.findByOrderId(id);
         
         model.addAttribute("order", order);
@@ -80,7 +96,12 @@ public class CustomerOrderController {
         model.addAttribute("books", bookService.findAll());
         model.addAttribute("supplies", supplyService.findAll());
         model.addAttribute("services", serviceService.findAll());
-        return "order-details";
+
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+        
+        return "admin/order-details";
     }
 
     @PostMapping("/{id}/details")
@@ -93,7 +114,7 @@ public class CustomerOrderController {
                                 @RequestParam("unitPrice") Double unitPrice) {
         
         CustomerOrder order = customerOrderService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid order Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + id));
         
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setCustomerOrder(order);
@@ -105,21 +126,21 @@ public class CustomerOrderController {
             case "book":
                 if (bookId != null) {
                     Book book = bookService.findById(bookId)
-                            .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+                            .orElseThrow(() -> new IllegalArgumentException("ID inválido de libro:" + bookId));
                     orderDetail.setBook(book);
                 }
                 break;
             case "supply":
                 if (supplyId != null) {
                     Supply supply = supplyService.findById(supplyId)
-                            .orElseThrow(() -> new IllegalArgumentException("Invalid supply Id:" + supplyId));
+                            .orElseThrow(() -> new IllegalArgumentException("ID inválido de útil:" + supplyId));
                     orderDetail.setSupply(supply);
                 }
                 break;
             case "service":
                 if (serviceId != null) {
                     Service service = serviceService.findById(serviceId)
-                            .orElseThrow(() -> new IllegalArgumentException("Invalid service Id:" + serviceId));
+                            .orElseThrow(() -> new IllegalArgumentException("ID inválido de servicio:" + serviceId));
                     orderDetail.setService(service);
                 }
                 break;
@@ -139,22 +160,26 @@ public class CustomerOrderController {
     @GetMapping("/{orderId}/details/edit/{detailId}")
     public String showEditOrderDetailForm(@PathVariable("orderId") Integer orderId,
                                         @PathVariable("detailId") Integer detailId,
-                                        Model model) {
+                                        Model model, Authentication authentication) {
         CustomerOrder order = customerOrderService.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid order Id:" + orderId));
+                .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + orderId));
         OrderDetail orderDetail = orderDetailService.findById(detailId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid order detail Id:" + detailId));
+                .orElseThrow(() -> new IllegalArgumentException("ID inválido de detalle:" + detailId));
         
         model.addAttribute("order", order);
         model.addAttribute("orderDetail", orderDetail);
-        return "order-detail-edit";
+
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        model.addAttribute("isAdmin", isAdmin);
+        
+        return "admin/order-detail-edit";
     }
 
     @PostMapping("/{orderId}/details/update/{detailId}")
     public String updateOrderDetail(@PathVariable("orderId") Integer orderId,
                                   @PathVariable("detailId") Integer detailId,
                                   @ModelAttribute("orderDetail") OrderDetail orderDetail) {
-        // Usar el método updateQuantity que tiene el trigger
         orderDetailService.updateQuantity(detailId, orderDetail.getQuantity());
         return "redirect:/orders/" + orderId + "/details";
     }

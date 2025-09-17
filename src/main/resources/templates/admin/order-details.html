@@ -11,7 +11,7 @@
         <div class="dashboard-container">
             <h1>Detalles de Orden #<span th:text="${order.orderId}">1</span></h1>
             <p>Cliente: <span th:text="${order.client?.firstName}">Cliente</span> | 
-               Fecha: <span th:text="${order.orderDate}">01/01/2024</span> | 
+               Fecha: <span th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy')}">01/01/2024</span> | 
                Estado: <span th:text="${order.status?.statusName}">Estado</span></p>
 
             <div class="order-info">
