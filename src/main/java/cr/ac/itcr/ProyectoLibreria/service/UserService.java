@@ -35,18 +35,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User registerNewUser(String username, String password, String role) {
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new RuntimeException("El nombre de usuario ya existe");
-        }
-
-        User newUser = new User();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-        newUser.setRole(role != null ? role : User.UserRole.CLIENT.getValue());
-
-        return save(newUser);
-    }
 
     public void deleteById(int id) {
         userRepository.deleteById(id);
