@@ -40,8 +40,8 @@
                                 <span th:if="${detail.supply != null}" th:text="${detail.supply.supplyName}">Nombre del Útil</span>
                             </td>
                             <td th:text="${detail.quantity}">1</td>
-                            <td>$<span th:text="${#numbers.formatDecimal(detail.unitPrice, 1, 2)}">$0.00</span></td>
-                            <td>$<span th:text="${#numbers.formatDecimal(detail.quantity * detail.unitPrice, 1, 2)}">$0.00</span></td>
+                            <td>₡<span th:text="${#numbers.formatDecimal(detail.unitPrice, 0, 0)}">0</span></td>
+                            <td>₡<span th:text="${#numbers.formatDecimal(detail.quantity * detail.unitPrice, 0, 0)}">0</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -51,7 +51,7 @@
 
                 <div th:if="${!#lists.isEmpty(order.orderDetails)}" class="order-summary">
                     <div class="total-section">
-                        <strong class="total-text">Total de la Orden: $<span th:text="${#numbers.formatDecimal(#aggregates.sum(order.orderDetails.![quantity * unitPrice]), 1, 2)}">$0.00</span></strong>
+                        <strong class="total-text">Total de la Orden: ₡<span th:text="${#numbers.formatDecimal(#aggregates.sum(order.orderDetails.![quantity * unitPrice]), 0, 0)}">0</span></strong>
                     </div>
                     <div class="order-actions">
                         <a th:href="@{/catalog/my-orders}" class="btn btn-continue">Volver a Mis Órdenes</a>

@@ -80,14 +80,6 @@
     overflow: hidden;
 }
 
-
-
-.author-name:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-}
-
 @keyframes fadeInUp {
     from {
         opacity: 0;

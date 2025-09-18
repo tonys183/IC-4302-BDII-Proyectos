@@ -1,9 +1,9 @@
---- Mostrar a los clientes que hayan gastado más de 4000 en supplies ---
+--- Mostrar a los clientes que hayan gastado más de 2000 colones en supplies ---
 SELECT (c.first_name || ' ' || c.last_name1) AS nombre_completo, s.supply_name, od.quantity, (od.quantity * od.unit_price) AS total_detalle FROM OrderDetail od
 INNER JOIN Supply s ON od.supply_id = s.supply_id
 INNER JOIN CustomerOrder o ON od.order_id = o.order_id
 INNER JOIN Client c ON o.client_id = c.client_id
-WHERE (od.quantity * od.unit_price) >= 4000 AND od.supply_id IS NOT NULL;
+WHERE (od.quantity * od.unit_price) >= 2000 AND od.supply_id IS NOT NULL;
 
 --- Mostrar a todos los clientes, y los libros que han comprado, pueden ser 0 ---
 SELECT (c.first_name || ' ' || c.last_name1) AS nombre_completo, COUNT(od.book_id) AS libros_comprados FROM OrderDetail od

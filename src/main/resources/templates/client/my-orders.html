@@ -22,7 +22,6 @@
             <table class="table" th:if="${!#lists.isEmpty(orders)}">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Cliente</th>
                         <th>Fecha</th>
                         <th>Total Items</th>
@@ -33,12 +32,11 @@
                 </thead>
                 <tbody>
                     <tr th:each="order : ${orders}">
-                        <td th:text="${order.orderId}">1</td>
                         <td th:text="${order.client.firstName + ' ' + order.client.lastName1}">Cliente</td>
                         <td th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy')}">01/01/2024</td>
                         <td th:text="${#lists.size(order.orderDetails)}">0</td>
-                        <td th:if="${!#lists.isEmpty(order.orderDetails)}">$<span th:text="${#numbers.formatDecimal(#aggregates.sum(order.orderDetails.![quantity * unitPrice]), 1, 2)}">$0.00</span></td>
-                        <td th:if="${#lists.isEmpty(order.orderDetails)}">$0.00</td>
+                        <td th:if="${!#lists.isEmpty(order.orderDetails)}">₡<span th:text="${#numbers.formatDecimal(#aggregates.sum(order.orderDetails.![quantity * unitPrice]), 0, 0)}">0</span></td>
+                        <td th:if="${#lists.isEmpty(order.orderDetails)}">₡0</td>
                         <td th:text="${order.status.statusName}">Estado</td>
                         <td>
                             <a th:href="@{/catalog/order-details/{id}(id=${order.orderId})}" class="btn btn-sm btn-details">Ver Detalles</a>

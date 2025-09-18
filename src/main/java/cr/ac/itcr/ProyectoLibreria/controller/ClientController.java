@@ -196,25 +196,27 @@ public class ClientController {
         
         OrderDetail item = new OrderDetail();
         item.setQuantity(quantity);
-        item.setUnitPrice(25.0);
         item.setDateDetail(new java.util.Date());
         
         if ("book".equals(itemType) && bookId != null) {
             Book book = bookService.findById(bookId).orElse(null);
             if (book != null) {
                 item.setBook(book);
+                item.setUnitPrice(book.getPrice());
                 orderItems.add(item);
             }
         } else if ("service".equals(itemType) && serviceId != null) {
             Service service = serviceService.findById(serviceId).orElse(null);
             if (service != null) {
                 item.setService(service);
+                item.setUnitPrice(service.getPrice());
                 orderItems.add(item);
             }
         } else if ("supply".equals(itemType) && supplyId != null) {
             Supply supply = supplyService.findById(supplyId).orElse(null);
             if (supply != null) {
                 item.setSupply(supply);
+                item.setUnitPrice(supply.getPrice());
                 orderItems.add(item);
             }
         }

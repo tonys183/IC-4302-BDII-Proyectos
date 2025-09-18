@@ -15,6 +15,9 @@ public class Service {
     @Column(name = "service_name", nullable = false)
     private String serviceName;
 
+    @Column(name = "price", nullable = false)
+    private double price;
+
     @ManyToOne
     @JoinColumn(name = "type_id", nullable = false)
     private ServiceType type;

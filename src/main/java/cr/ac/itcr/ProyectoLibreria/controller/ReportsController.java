@@ -54,7 +54,7 @@ public class ReportsController {
                         "INNER JOIN Supply s ON od.supply_id = s.supply_id " +
                         "INNER JOIN CustomerOrder o ON od.order_id = o.order_id " +
                         "INNER JOIN Client c ON o.client_id = c.client_id " +
-                        "WHERE (od.quantity * od.unit_price) >= 4000 AND od.supply_id IS NOT NULL";
+                        "WHERE (od.quantity * od.unit_price) >= 2000 AND od.supply_id IS NOT NULL";
             
             try (PreparedStatement stmt = connection.prepareStatement(sql);
                  ResultSet rs = stmt.executeQuery()) {

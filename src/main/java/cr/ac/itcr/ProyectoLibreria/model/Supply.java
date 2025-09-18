@@ -17,4 +17,7 @@ public class Supply {
 
     @Column(name = "stock", nullable = false)
     private int stock;
+
+    @Column(name = "price", nullable = false)
+    private double price;
 }

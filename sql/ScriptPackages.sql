@@ -15,12 +15,19 @@
     FUNCTION insert_book (
         p_book_name IN Book.book_name%TYPE,
         p_ISBN IN Book.ISBN%TYPE,
-        p_publisher_name IN publisher.publisher_name%TYPE
+        p_publisher_name IN publisher.publisher_name%TYPE,
+        p_price IN Book.price%TYPE
     ) RETURN Book.book_id%TYPE;
     FUNCTION insert_service (
         p_service_name IN Service.service_name%TYPE,
-        p_type_name IN ServiceType.type_name%TYPE
+        p_type_name IN ServiceType.type_name%TYPE,
+        p_price IN Service.price%TYPE
     ) RETURN Service.service_id%TYPE;
+    FUNCTION insert_supply (
+        p_supply_name IN Supply.supply_name%TYPE,
+        p_stock IN Supply.stock%TYPE,
+        p_price IN Supply.price%TYPE
+    ) RETURN Supply.supply_id%TYPE;
 END pkg_modifications;
 /
 
@@ -78,7 +85,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
     FUNCTION insert_book(
         p_book_name       IN Book.book_name%TYPE,
         p_ISBN            IN Book.ISBN%TYPE,
-        p_publisher_name  IN Publisher.publisher_name%TYPE
+        p_publisher_name  IN Publisher.publisher_name%TYPE,
+        p_price           IN Book.price%TYPE
     ) RETURN Book.book_id%TYPE IS
         v_book_id       Book.book_id%TYPE;
         v_publisher_id  Publisher.publisher_id%TYPE;
@@ -96,8 +104,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
                 DBMS_OUTPUT.PUT_LINE('Nuevo publisher insertado: ' || p_publisher_name);
         END;
 
-        INSERT INTO Book (book_name, ISBN, publisher_id)
-        VALUES (p_book_name, p_ISBN, v_publisher_id)
+        INSERT INTO Book (book_name, ISBN, publisher_id, price)
+        VALUES (p_book_name, p_ISBN, v_publisher_id, p_price)
         RETURNING book_id INTO v_book_id;
         RETURN v_book_id;
 
@@ -202,7 +210,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
     --- Insert service ---
     FUNCTION insert_service(
         p_service_name IN Service.service_name%TYPE,
-        p_type_name IN ServiceType.type_name%TYPE
+        p_type_name IN ServiceType.type_name%TYPE,
+        p_price IN Service.price%TYPE
     ) RETURN Service.service_id%TYPE IS
         v_service_id Service.service_id%TYPE;
         v_type_id ServiceType.type_id%TYPE;
@@ -217,7 +226,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
                 RETURNING type_id INTO v_type_id;
         END;
 
-        INSERT INTO Service (service_name, type_id) VALUES (p_service_name, v_type_id)
+        INSERT INTO Service (service_name, type_id, price) VALUES (p_service_name, v_type_id, p_price)
         RETURNING service_id INTO v_service_id;
         RETURN v_service_id;
 
@@ -227,6 +236,27 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         WHEN OTHERS THEN
             RETURN NULL;
     END insert_service;
+
+    --- Insert supply ---
+    FUNCTION insert_supply(
+        p_supply_name IN Supply.supply_name%TYPE,
+        p_stock IN Supply.stock%TYPE,
+        p_price IN Supply.price%TYPE
+    ) RETURN Supply.supply_id%TYPE IS
+        v_supply_id Supply.supply_id%TYPE;
+    BEGIN
+        INSERT INTO Supply (supply_name, stock, price) 
+        VALUES (p_supply_name, p_stock, p_price)
+        RETURNING supply_id INTO v_supply_id;
+        RETURN v_supply_id;
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            DBMS_OUTPUT.PUT_LINE('Supply name ya existe: ' || p_supply_name);
+            RETURN NULL;
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error insertando supply: ' || SQLERRM);
+            RETURN NULL;
+    END insert_supply;
 
 END pkg_modifications;
 /
@@ -242,7 +272,7 @@ END pkg_queries;
 CREATE OR REPLACE PACKAGE BODY pkg_queries AS
 
     --- Show book details
-    PROCEDURE show_book_details IS
+    PROCEDURE showBookDetails IS
     BEGIN
         FOR book IN (
             SELECT b.book_id, b.book_name, b.ISBN, a.first_name, a.last_name1, a.last_name2, p.publisher_name
@@ -263,7 +293,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_queries AS
     END showBookDetails;
 
     --- Get order count user
-    FUNCTION get_order_count_user(user_mail IN VARCHAR2) RETURN NUMBER
+    FUNCTION getOrderCountByUser(user_mail IN VARCHAR2) RETURN NUMBER
     IS
     v_order_count NUMBER;
 

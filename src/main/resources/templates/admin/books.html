@@ -23,6 +23,7 @@
                     <th>Editorial</th>
                     <th>Autor(es)</th>
                     <th>Género(s)</th>
+                    <th>Precio</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
@@ -36,6 +37,7 @@
                     <td>
                         <span th:each="genre, iterStat : ${book.genres}" th:text="${genre.genreName} + (${iterStat.last} ? '' : ', ')"></span>
                     </td>
+                    <td><span class="price">₡<span th:text="${#numbers.formatDecimal(book.price, 0, 0)}">0</span></span></td>
                     <td>
                         <a th:href="@{/books/edit/{id}(id=${book.bookId})}" class="btn btn-sm btn-info">Editar</a>
                         <a th:href="@{/books/delete/{id}(id=${book.bookId})}" class="btn btn-sm btn-danger"

@@ -92,10 +92,23 @@ public class OrderDetailService {
                     try (var rs = stmt.executeQuery()) {
                         if (rs.next()) {
                             Integer userId = rs.getInt("user_id");
-                            String callSql = "CALL set_admin_context(?)";
-                            try (CallableStatement callStmt = connection.prepareCall(callSql)) {
-                                callStmt.setInt(1, userId);
-                                callStmt.execute();
+                            
+                            // Limpiar sesiones antiguas
+                            String cleanupSql = "DELETE FROM Temp_Admin_Session WHERE created_date < SYSDATE - 1/24";
+                            try (var cleanupStmt = connection.prepareStatement(cleanupSql)) {
+                                cleanupStmt.executeUpdate();
+                            }
+                            
+                            // Actualizar o insertar admin activo en la sesión
+                            String upsertSql = "MERGE INTO Temp_Admin_Session a " +
+                                             "USING (SELECT ? as username, ? as admin_user_id FROM dual) b " +
+                                             "ON (a.username = b.username) " +
+                                             "WHEN MATCHED THEN UPDATE SET admin_user_id = b.admin_user_id, created_date = SYSDATE " +
+                                             "WHEN NOT MATCHED THEN INSERT (username, admin_user_id) VALUES (b.username, b.admin_user_id)";
+                            try (var upsertStmt = connection.prepareStatement(upsertSql)) {
+                                upsertStmt.setString(1, username);
+                                upsertStmt.setInt(2, userId);
+                                upsertStmt.executeUpdate();
                             }
                         }
                     }

@@ -23,6 +23,9 @@ public class Book {
     @Column(name = "ISBN", nullable = false, unique = true)
     private String isbn;
 
+    @Column(name = "price", nullable = false)
+    private double price;
+
     @ManyToOne
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;

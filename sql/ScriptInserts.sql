@@ -61,16 +61,16 @@ INSERT INTO Genre (genre_name) VALUES ('Novela Social');
 INSERT INTO Genre (genre_name) VALUES ('Metaficción');
 
 --- Insert Supplies ---
-INSERT INTO Supply (supply_name, stock) VALUES ('Cuadernos', 50);
-INSERT INTO Supply (supply_name, stock) VALUES ('Lápices', 100);
-INSERT INTO Supply (supply_name, stock) VALUES ('Borradores', 75);
-INSERT INTO Supply (supply_name, stock) VALUES ('Marcadores', 60);
-INSERT INTO Supply (supply_name, stock) VALUES ('Resaltadores', 40);
-INSERT INTO Supply (supply_name, stock) VALUES ('Carpetas', 30);
-INSERT INTO Supply (supply_name, stock) VALUES ('Reglas', 80);
-INSERT INTO Supply (supply_name, stock) VALUES ('Tijeras', 25);
-INSERT INTO Supply (supply_name, stock) VALUES ('Pegamento', 45);
-INSERT INTO Supply (supply_name, stock) VALUES ('Colores', 90);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Cuadernos', 50, 1750);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Lápices', 100, 375);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Borradores', 75, 625);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Marcadores', 60, 1000);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Resaltadores', 40, 750);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Carpetas', 30, 2125);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Reglas', 80, 500);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Tijeras', 25, 1875);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Pegamento', 45, 1250);
+INSERT INTO Supply (supply_name, stock, price) VALUES ('Colores', 90, 2995);
 
 --- Insert Status ---
 INSERT INTO Status (status_name) VALUES ('Completado');
@@ -89,35 +89,37 @@ BEGIN
     DECLARE
     temp Service.service_id%TYPE;
     BEGIN
-    temp := pkg_modifications.insert_service('Fotocopiado blanco y negro', 'Fotocopiado');
-    temp := pkg_modifications.insert_service('Fotocopiado a color', 'Fotocopiado');
-    temp := pkg_modifications.insert_service('Impresión blanco y negro', 'Impresión');
-    temp := pkg_modifications.insert_service('Impresión a color', 'Impresión');
-    temp := pkg_modifications.insert_service('Encuadernación térmica', 'Encuadernación');
-    temp := pkg_modifications.insert_service('Entrega local', 'Entrega a domicilio');
-    temp := pkg_modifications.insert_service('Entrega nacional', 'Entrega a domicilio');
-    temp := pkg_modifications.insert_service('Reserva de libros', 'Reserva de productos');
-    temp := pkg_modifications.insert_service('Reserva de útiles escolares', 'Reserva de productos');
+    temp := pkg_modifications.insert_service('Fotocopiado blanco y negro', 'Fotocopiado', 50);
+    temp := pkg_modifications.insert_service('Fotocopiado a color', 'Fotocopiado', 125);
+    temp := pkg_modifications.insert_service('Impresión blanco y negro', 'Impresión', 75);
+    temp := pkg_modifications.insert_service('Impresión a color', 'Impresión', 175);
+    temp := pkg_modifications.insert_service('Encuadernación térmica', 'Encuadernación', 2500);
+    temp := pkg_modifications.insert_service('Entrega local', 'Entrega a domicilio', 1250);
+    temp := pkg_modifications.insert_service('Entrega nacional', 'Entrega a domicilio', 4000);
+    temp := pkg_modifications.insert_service('Reserva de libros', 'Reserva de productos', 500);
+    temp := pkg_modifications.insert_service('Reserva de útiles escolares', 'Reserva de productos', 500);
     END;
 END;
+/
 
 --- Insert Book ---
 BEGIN
     DECLARE
         temp Book.book_id%TYPE;
     BEGIN
-        temp := pkg_modifications.insert_book('1984', '9780451524935', 'Signet Classics');
-        temp := pkg_modifications.insert_book('Don Quijote de la Mancha', '9788420412146', 'Alfaguara');
-        temp := pkg_modifications.insert_book('El Amor en los Tiempos del Cólera', '9780307389732', 'Vintage Español');
-        temp := pkg_modifications.insert_book('Harry Potter y la Piedra Filosofal', '9780747532743', 'Bloomsbury');
-        temp := pkg_modifications.insert_book('Pedro Páramo', '9788437600468', 'Ediciones Era');
-        temp := pkg_modifications.insert_book('La Sombra del Viento', '9788408172177', 'Planeta');
-        temp := pkg_modifications.insert_book('Ficciones', '9780679410430', 'Knopf');
-        temp := pkg_modifications.insert_book('La Ciudad y los Perros', '9788420437484', 'Seix Barral');
-        temp := pkg_modifications.insert_book('El Aleph', '9788420633121', 'Debolsillo');
-        temp := pkg_modifications.insert_book('Cien Años de Soledad', '9780307474728', 'Editorial Sudamericana');
+        temp := pkg_modifications.insert_book('1984', '9780451524935', 'Signet Classics', 7995);
+        temp := pkg_modifications.insert_book('Don Quijote de la Mancha', '9788420412146', 'Alfaguara', 11250);
+        temp := pkg_modifications.insert_book('El Amor en los Tiempos del Cólera', '9780307389732', 'Vintage Español', 9375);
+        temp := pkg_modifications.insert_book('Harry Potter y la Piedra Filosofal', '9780747532743', 'Bloomsbury', 6495);
+        temp := pkg_modifications.insert_book('Pedro Páramo', '9788437600468', 'Ediciones Era', 8125);
+        temp := pkg_modifications.insert_book('La Sombra del Viento', '9788408172177', 'Planeta', 10000);
+        temp := pkg_modifications.insert_book('Ficciones', '9780679410430', 'Knopf', 7250);
+        temp := pkg_modifications.insert_book('La Ciudad y los Perros', '9788420437484', 'Seix Barral', 9995);
+        temp := pkg_modifications.insert_book('El Aleph', '9788420633121', 'Debolsillo', 6875);
+        temp := pkg_modifications.insert_book('Cien Años de Soledad', '9780307474728', 'Editorial Sudamericana', 8750);
     END;
 END;
+/
 
 BEGIN
     --- Link Authors to Books ---
@@ -148,7 +150,7 @@ BEGIN
     pkg_modifications.add_genre_to_book('Cuento', 'El Aleph');
     pkg_modifications.add_genre_to_book('Realismo Mágico', 'Cien Años de Soledad');
 END;
-
+/
 
 /*=== TABLAS TRANSCACIONALES ===*/
 --- Insert CustomerOrder ---
@@ -174,28 +176,28 @@ INSERT INTO CustomerOrder (order_date, client_id, status_id) VALUES (TO_DATE('20
 INSERT INTO CustomerOrder (order_date, client_id, status_id) VALUES (TO_DATE('2025-09-20','YYYY-MM-DD'), 10, 3);
 
 --- Insert OrderDetail ---
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (1, 1, 1, 15.50, TO_DATE('2025-09-01','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (1, 2, 5, 0.50, TO_DATE('2025-09-01','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (2, 3, 1, 20.00, TO_DATE('2025-09-02','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (3, 5, 1, 20.00, TO_DATE('2025-09-03','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, service_id, quantity, unit_price, date_detail) VALUES (3, 3, 1, 5.00, TO_DATE('2025-09-03','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (4, 1, 3, 1.50, TO_DATE('2025-09-04','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (4, 5, 2, 2.00, TO_DATE('2025-09-04','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (5, 10, 1, 18.00, TO_DATE('2025-09-05','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (6, 3, 4, 0.75, TO_DATE('2025-09-06','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, service_id, quantity, unit_price, date_detail) VALUES (7, 4, 1, 10.00, TO_DATE('2025-09-07','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (8, 2, 1, 25.00, TO_DATE('2025-09-08','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (9, 6, 2, 3.00, TO_DATE('2025-09-09','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (10, 4, 1, 16.50, TO_DATE('2025-09-10','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, service_id, quantity, unit_price, date_detail) VALUES (11, 5, 2, 2.00, TO_DATE('2025-09-11','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (12, 3, 1, 22.00, TO_DATE('2025-09-12','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (13, 4, 3, 1.50, TO_DATE('2025-09-13','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (14, 6, 1, 19.00, TO_DATE('2025-09-14','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (15, 7, 2, 1.00, TO_DATE('2025-09-15','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (16, 11, 1, 21.00, TO_DATE('2025-09-16','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, service_id, quantity, unit_price, date_detail) VALUES (17, 2, 1, 0.50, TO_DATE('2025-09-17','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (18, 9, 1, 14.00, TO_DATE('2025-09-18','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (19, 8, 1, 2.50, TO_DATE('2025-09-19','YYYY-MM-DD'));
-INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (20, 8, 2, 17.00, TO_DATE('2025-09-20','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (1, 1, 1, 7750, TO_DATE('2025-09-01','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (1, 2, 5, 250, TO_DATE('2025-09-01','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (2, 3, 1, 10000, TO_DATE('2025-09-02','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (3, 5, 1, 10000, TO_DATE('2025-09-03','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, service_id, quantity, unit_price, date_detail) VALUES (3, 3, 1, 2500, TO_DATE('2025-09-03','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (4, 1, 3, 750, TO_DATE('2025-09-04','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (4, 5, 2, 1000, TO_DATE('2025-09-04','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (5, 10, 1, 9000, TO_DATE('2025-09-05','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (6, 3, 4, 375, TO_DATE('2025-09-06','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, service_id, quantity, unit_price, date_detail) VALUES (7, 4, 1, 5000, TO_DATE('2025-09-07','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (8, 2, 1, 12500, TO_DATE('2025-09-08','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (9, 6, 2, 1500, TO_DATE('2025-09-09','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (10, 4, 1, 8250, TO_DATE('2025-09-10','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, service_id, quantity, unit_price, date_detail) VALUES (11, 5, 2, 1000, TO_DATE('2025-09-11','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (12, 3, 1, 11000, TO_DATE('2025-09-12','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (13, 4, 3, 750, TO_DATE('2025-09-13','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (14, 6, 1, 9500, TO_DATE('2025-09-14','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (15, 7, 2, 500, TO_DATE('2025-09-15','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (16, 10, 1, 10500, TO_DATE('2025-09-16','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, service_id, quantity, unit_price, date_detail) VALUES (17, 2, 1, 250, TO_DATE('2025-09-17','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (18, 9, 1, 7000, TO_DATE('2025-09-18','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, supply_id, quantity, unit_price, date_detail) VALUES (19, 8, 1, 1250, TO_DATE('2025-09-19','YYYY-MM-DD'));
+INSERT INTO OrderDetail (order_id, book_id, quantity, unit_price, date_detail) VALUES (20, 8, 2, 8500, TO_DATE('2025-09-20','YYYY-MM-DD'));
 
 COMMIT;
