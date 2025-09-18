@@ -87,7 +87,7 @@ INSERT INTO ServiceType (type_name) VALUES ('Reserva de productos');
 --- Insert Service ---
 BEGIN
     DECLARE
-    temp Service.service_id%TYPE;
+        temp Service.service_id%TYPE;
     BEGIN
     temp := pkg_modifications.insert_service('Fotocopiado blanco y negro', 'Fotocopiado', 50);
     temp := pkg_modifications.insert_service('Fotocopiado a color', 'Fotocopiado', 125);

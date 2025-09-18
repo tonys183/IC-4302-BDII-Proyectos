@@ -1,5 +1,5 @@
 /*=== PACKAGE MODIFICATIONS ===*/
-    CREATE OR REPLACE PACKAGE pkg_modifications AS
+CREATE OR REPLACE PACKAGE pkg_modifications AS
     PROCEDURE delete_order(p_order_id in NUMBER);
     PROCEDURE update_order_quantity(p_order_id in NUMBER, new_quantity in NUMBER);
     PROCEDURE add_author_to_book(
@@ -33,55 +33,54 @@ END pkg_modifications;
 
 CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
 
-    --- Delete order ---
+    --- Delete Order ---
     PROCEDURE delete_order(p_order_id IN NUMBER) IS
         v_status_name Status.status_name%TYPE;
     BEGIN
-    SELECT s.status_name INTO v_status_name FROM CustomerOrder co
-    JOIN Status s ON co.status_id = s.status_id
-    WHERE co.order_id = p_order_id;
+        SELECT s.status_name INTO v_status_name FROM CustomerOrder co
+        INNER JOIN Status s ON co.status_id = s.status_id
+        WHERE co.order_id = p_order_id;
 
-    IF v_status_name != 'Pending' THEN
-        DBMS_OUTPUT.PUT_LINE('Cannot delete order with status: ' || v_status_name);
-        RETURN;
-    END IF;
+        IF v_status_name != 'Pending' THEN
+            DBMS_OUTPUT.PUT_LINE('No se puede eliminar el pedido con estado: ' || v_status_name);
+            RETURN;
+        END IF;
 
-    DELETE FROM OrderDetail WHERE order_id = p_order_id;
-    DELETE FROM CustomerOrder WHERE order_id = p_order_id;
-    COMMIT;
+        DELETE FROM OrderDetail WHERE order_id = p_order_id;
+        DELETE FROM CustomerOrder WHERE order_id = p_order_id;
+        COMMIT;
 
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            DBMS_OUTPUT.PUT_LINE('No order found with ID: ' || p_order_id);
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+            DBMS_OUTPUT.PUT_LINE('No se encontró el pedido con ID: ' || p_order_id);
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
     END delete_order;
 
-    --- Update order quantity ---
+    --- Update Order Quantity ---
     PROCEDURE update_order_quantity(p_order_id in NUMBER, new_quantity in NUMBER) IS
-            v_status_name Status.status_name%TYPE;
+        v_status_name Status.status_name%TYPE;
     BEGIN
-    SELECT s.status_name
-    INTO v_status_name FROM CustomerOrder co
-    JOIN Status s ON co.status_id = s.status_id
-    WHERE co.order_id = p_order_id;
+        SELECT s.status_name INTO v_status_name FROM CustomerOrder co
+        INNER JOIN Status s ON co.status_id = s.status_id
+        WHERE co.order_id = p_order_id;
 
-    IF v_status_name != 'Pending' THEN
-        DBMS_OUTPUT.PUT_LINE('Cannot update order with status: ' || v_status_name);
-        RETURN;
-    END IF;
+        IF v_status_name != 'Pending' THEN
+            DBMS_OUTPUT.PUT_LINE('No se puede actualizar el pedido con estado: ' || v_status_name);
+            RETURN;
+        END IF;
 
-    UPDATE OrderDetail SET quantity = new_quantity WHERE order_id = p_order_id;
-    COMMIT;
+        UPDATE OrderDetail SET quantity = new_quantity WHERE order_id = p_order_id;
+        COMMIT;
 
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-                DBMS_OUTPUT.PUT_LINE('No order found with ID: ' || p_order_id);
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+                DBMS_OUTPUT.PUT_LINE('No se encontró el pedido con ID: ' || p_order_id);
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
     END update_order_quantity;
 
-    --- Insert book ---
+    --- Insert Book ---
     FUNCTION insert_book(
         p_book_name       IN Book.book_name%TYPE,
         p_ISBN            IN Book.ISBN%TYPE,
@@ -104,18 +103,17 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
                 DBMS_OUTPUT.PUT_LINE('Nuevo publisher insertado: ' || p_publisher_name);
         END;
 
-        INSERT INTO Book (book_name, ISBN, publisher_id, price)
-        VALUES (p_book_name, p_ISBN, v_publisher_id, p_price)
+        INSERT INTO Book (book_name, ISBN, publisher_id, price) VALUES (p_book_name, p_ISBN, v_publisher_id, p_price)
         RETURNING book_id INTO v_book_id;
         RETURN v_book_id;
 
         EXCEPTION
             WHEN DUP_VAL_ON_INDEX THEN
                 DBMS_OUTPUT.PUT_LINE('ISBN ya existe: ' || p_ISBN);
-        RETURN NULL;
+                RETURN NULL;
         WHEN OTHERS THEN
                 DBMS_OUTPUT.PUT_LINE('Error insertando libro: ' || SQLERRM);
-        RETURN NULL;
+                RETURN NULL;
     END insert_book;
 
     --- Link Author to Book ---
@@ -132,21 +130,21 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         WHERE book_name = p_book_name;
 
         BEGIN
-        SELECT author_id INTO v_author_id FROM Author
-        WHERE first_name = p_first_name AND last_name1 = p_last_name1
-        AND (last_name2 = p_last_name2 OR (last_name2 IS NULL AND p_last_name2 IS NULL));
-        EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-                INSERT INTO Author (first_name, last_name1, last_name2)
-                VALUES (p_first_name, p_last_name1, p_last_name2)
-                RETURNING author_id INTO v_author_id;
+            SELECT author_id INTO v_author_id FROM Author
+            WHERE first_name = p_first_name AND last_name1 = p_last_name1
+            AND (last_name2 = p_last_name2 OR (last_name2 IS NULL AND p_last_name2 IS NULL));
+            EXCEPTION
+                WHEN NO_DATA_FOUND THEN
+                    INSERT INTO Author (first_name, last_name1, last_name2)
+                    VALUES (p_first_name, p_last_name1, p_last_name2)
+                    RETURNING author_id INTO v_author_id;
         END;
 
         BEGIN
-        INSERT INTO Book_Author (book_id, author_id)
-        VALUES (v_book_id, v_author_id);
-        EXCEPTION
-            WHEN DUP_VAL_ON_INDEX THEN NULL;
+            INSERT INTO Book_Author (book_id, author_id)
+            VALUES (v_book_id, v_author_id);
+            EXCEPTION
+                WHEN DUP_VAL_ON_INDEX THEN NULL;
         END;
     END;
 
@@ -163,12 +161,12 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         WHERE book_name = p_book_name;
 
         BEGIN
-        SELECT genre_id INTO v_genre_id FROM Genre
-        WHERE genre_name = p_genre_name;
-        EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-                INSERT INTO Genre (genre_name) VALUES (p_genre_name)
-                RETURNING genre_id INTO v_genre_id;
+            SELECT genre_id INTO v_genre_id FROM Genre
+            WHERE genre_name = p_genre_name;
+            EXCEPTION
+                WHEN NO_DATA_FOUND THEN
+                    INSERT INTO Genre (genre_name) VALUES (p_genre_name)
+                    RETURNING genre_id INTO v_genre_id;
         END;
         BEGIN
             INSERT INTO Genre_Book (genre_id, book_id) VALUES (v_genre_id, v_book_id);
@@ -179,7 +177,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         END;
     END;
 
-    --- Create customer order ---
+    --- Create Customer Order ---
     PROCEDURE create_customer_order(
         p_first_name IN Client.first_name%TYPE,
         p_last_name1 IN Client.last_name1%TYPE,
@@ -217,8 +215,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         v_type_id ServiceType.type_id%TYPE;
     BEGIN
         BEGIN
-            SELECT type_id INTO v_type_id
-            FROM ServiceType
+            SELECT type_id INTO v_type_id FROM ServiceType
             WHERE type_name = p_type_name;
         EXCEPTION
             WHEN NO_DATA_FOUND THEN
@@ -271,7 +268,7 @@ END pkg_queries;
 
 CREATE OR REPLACE PACKAGE BODY pkg_queries AS
 
-    --- Show book details
+    --- Show Book Details
     PROCEDURE showBookDetails IS
     BEGIN
         FOR book IN (
@@ -292,14 +289,14 @@ CREATE OR REPLACE PACKAGE BODY pkg_queries AS
         END LOOP;
     END showBookDetails;
 
-    --- Get order count user
+    --- Get Order Count User
     FUNCTION getOrderCountByUser(user_mail IN VARCHAR2) RETURN NUMBER
     IS
-    v_order_count NUMBER;
+        v_order_count NUMBER;
 
     BEGIN
         SELECT COUNT(*) INTO v_order_count FROM CustomerOrder co
-        JOIN Client c ON co.client_id = c.client_id
+        INNER JOIN Client c ON co.client_id = c.client_id
         WHERE c.email = user_mail;
         RETURN v_order_count;
 
