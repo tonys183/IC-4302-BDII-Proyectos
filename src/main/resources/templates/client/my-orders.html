@@ -11,11 +11,11 @@
     <div class="main-content">
         <div class="dashboard-container">
             <h1>Mis Órdenes</h1>
-            <p>Visualiza el estado de tus pedidos y órdenes realizadas.</p>
+            <p>Estado de sus pedidos y órdenes realizadas.</p>
             
             <div th:if="${#lists.isEmpty(orders)}" class="no-orders">
-                <h4>No tienes órdenes registradas</h4>
-                <p>¡Explora nuestro catálogo y crea tu primera orden!</p>
+                <h4>No existen órdenes registradas</h4>
+                <p>Explore el catálogo y cree su orden</p>
                 <a href="/catalog" class="btn btn-primary">Ver Catálogo</a>
             </div>
 

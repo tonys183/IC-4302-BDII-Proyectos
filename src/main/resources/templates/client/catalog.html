@@ -12,7 +12,7 @@
     <div class="main-content">
         <div class="dashboard-container">
             <h1>Catálogo de Productos</h1>
-            <p>Explora nuestro catálogo completo de libros, servicios y útiles disponibles.</p>
+            <p>Catálogo completo de libros, servicios y útiles disponibles.</p>
 
             <div class="search-section">
                 <form id="searchForm" method="get" action="/catalog">
@@ -50,7 +50,7 @@
             <div id="books-results" th:if="${currentType == 'books'}">
                 <div th:if="${#lists.isEmpty(books)}" class="no-results">
                     <h4>No se encontraron libros</h4>
-                    <p>Intenta ajustar los filtros de búsqueda o <a href="/catalog">ver todos los libros</a></p>
+                    <p>Intente ajustar los filtros de búsqueda o <a href="/catalog">ver todos los libros</a></p>
                 </div>
                 
                 <div class="catalog-cards" th:if="${!#lists.isEmpty(books)}">
@@ -87,7 +87,7 @@
             <div th:if="${currentType == 'services'}">
                 <div th:if="${#lists.isEmpty(services)}" class="no-results">
                     <h4>No se encontraron servicios</h4>
-                    <p>Intenta ajustar los filtros de búsqueda o <a href="/catalog?type=services">ver todos los servicios</a></p>
+                    <p>Intente ajustar los filtros de búsqueda o <a href="/catalog?type=services">ver todos los servicios</a></p>
                 </div>
                 
                 <div class="catalog-cards" th:if="${!#lists.isEmpty(services)}">
@@ -115,7 +115,7 @@
             <div th:if="${currentType == 'supplies'}">
                 <div th:if="${#lists.isEmpty(supplies)}" class="no-results">
                     <h4>No se encontraron útiles</h4>
-                    <p>Intenta ajustar los filtros de búsqueda o <a href="/catalog?type=supplies">ver todos los útiles</a></p>
+                    <p>Intente ajustar los filtros de búsqueda o <a href="/catalog?type=supplies">ver todos los útiles</a></p>
                 </div>
                 
                 <div class="catalog-cards" th:if="${!#lists.isEmpty(supplies)}">

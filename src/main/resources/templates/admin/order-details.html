@@ -9,7 +9,7 @@
 <div class="app-container">
     <div class="main-content">
         <div class="dashboard-container">
-            <h1>Detalles de Orden #<span th:text="${order.orderId}">1</span></h1>
+            <h1>Detalles de la Orden #<span th:text="${order.orderId}">1</span></h1>
             <p>Cliente: <span th:text="${order.client?.firstName}">Cliente</span> | 
                Fecha: <span th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy')}">01/01/2024</span> | 
                Estado: <span th:text="${order.status?.statusName}">Estado</span></p>
@@ -35,7 +35,7 @@
                         <div class="form-group" id="bookGroup" style="display: none;">
                             <label for="bookId">Libro</label>
                             <select id="bookId" name="bookId" class="form-control">
-                                <option value="">Selecciona un libro</option>
+                                <option value="">Seleccione un libro</option>
                                 <option th:each="book : ${books}" th:value="${book.bookId}" th:text="${book.bookName}">Libro</option>
                             </select>
                         </div>
@@ -43,7 +43,7 @@
                         <div class="form-group" id="supplyGroup" style="display: none;">
                             <label for="supplyId">Suministro</label>
                             <select id="supplyId" name="supplyId" class="form-control">
-                                <option value="">Selecciona un suministro</option>
+                                <option value="">Seleccione un suministro</option>
                                 <option th:each="supply : ${supplies}" th:value="${supply.supplyId}" th:text="${supply.supplyName}">Suministro</option>
                             </select>
                         </div>
@@ -51,7 +51,7 @@
                         <div class="form-group" id="serviceGroup" style="display: none;">
                             <label for="serviceId">Servicio</label>
                             <select id="serviceId" name="serviceId" class="form-control">
-                                <option value="">Selecciona un servicio</option>
+                                <option value="">Seleccione un servicio</option>
                                 <option th:each="service : ${services}" th:value="${service.serviceId}" th:text="${service.serviceName}">Servicio</option>
                             </select>
                         </div>

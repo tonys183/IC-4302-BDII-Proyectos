@@ -1,3 +1,20 @@
+--- Trigger Delete Book Cascade - CustomerOrder & OrderDetail ---
+CREATE OR REPLACE TRIGGER trg_delete_book_cascade
+    AFTER DELETE ON Book
+    FOR EACH ROW
+DECLARE
+BEGIN
+    DELETE FROM OrderDetail
+    WHERE book_id = :OLD.book_id;
+
+    DELETE FROM CustomerOrder co
+    WHERE NOT EXISTS (
+        SELECT 1 FROM OrderDetail od
+        WHERE od.order_id = co.order_id
+    );
+END;
+/
+
 --- Trigger CustomerOrder - OrderDetail ---
 CREATE OR REPLACE TRIGGER trg_customer_order_date
     BEFORE INSERT ON CustomerOrder

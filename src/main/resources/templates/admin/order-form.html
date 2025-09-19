@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <label for="client">Cliente</label>
                             <select id="client" th:field="*{client}" class="form-control" required>
-                                <option value="">Selecciona un cliente</option>
+                                <option value="">Seleccione un cliente</option>
                                 <option th:each="client : ${clients}"
                                         th:value="${client.clientId}"
                                         th:text="${client.getFullName()}">Cliente</option>
@@ -35,7 +35,7 @@
                         <div class="form-group">
                             <label for="status">Estado</label>
                             <select id="status" th:field="*{status}" class="form-control" required>
-                                <option value="">Selecciona un estado</option>
+                                <option value="">Seleccione un estado</option>
                                 <option th:each="status : ${statuses}"
                                         th:value="${status.statusId}"
                                         th:text="${status.statusName}">Estado</option>

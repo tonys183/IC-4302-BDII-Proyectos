@@ -11,10 +11,10 @@
     <div class="main-content">
         <div class="dashboard-container">
             <h1>Crear Nueva Orden</h1>
-            <p>Agrega libros a tu orden y finalízala cuando estés listo.</p>
+            <p>Agregar productos y finalizar orden.</p>
 
             <div th:if="${!#lists.isEmpty(orderItems)}" class="order-items-section">
-                <h3>Items en tu Orden</h3>
+                <h3>Items en la Orden</h3>
                 <table class="table">
                     <thead>
                         <tr>
@@ -55,8 +55,8 @@
             </div>
 
             <div th:if="${#lists.isEmpty(orderItems)}" class="no-items">
-                <h4 class="empty-order-title">Tu orden está vacía</h4>
-                <p class="empty-order-text">Ve al catálogo para agregar libros a tu orden.</p>
+                <h4 class="empty-order-title">La orden está vacía</h4>
+                <p class="empty-order-text">Ir al catálogo para agregar productos.</p>
                 <a th:href="@{/catalog}" class="btn btn-primary">Ver Catálogo</a>
             </div>
 
