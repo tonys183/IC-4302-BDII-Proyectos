@@ -354,7 +354,6 @@ tbody tr:hover {
     margin-bottom: 20px;
 }
 
-/* Report buttons styling */
 .report-buttons {
     display: flex;
     gap: 1.5rem;
@@ -379,7 +378,6 @@ tbody tr:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
-/* No data message styling */
 .no-results {
     margin-top: 2rem;
     text-align: center;
@@ -408,7 +406,6 @@ tbody tr:hover {
     margin: 0;
 }
 
-/* Order form select styling */
 .order-form select.form-control {
     background-color: #3f3f3f;
     border: 1px solid var(--input-border);
@@ -427,7 +424,6 @@ tbody tr:hover {
     padding-right: 3rem;
 }
 
-/* Price styling */
 .price {
     color: #4CAF50;
     font-weight: 600;

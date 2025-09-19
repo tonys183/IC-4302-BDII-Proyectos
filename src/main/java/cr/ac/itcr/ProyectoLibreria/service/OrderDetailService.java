@@ -1,14 +1,12 @@
 package cr.ac.itcr.ProyectoLibreria.service;
 
 import cr.ac.itcr.ProyectoLibreria.model.OrderDetail;
-import cr.ac.itcr.ProyectoLibreria.model.Supply;
 import cr.ac.itcr.ProyectoLibreria.repository.OrderDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +17,6 @@ public class OrderDetailService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
     
-    @Autowired
-    private SupplyService supplyService;
     
     @Autowired
     private DataSource dataSource;
@@ -34,25 +30,7 @@ public class OrderDetailService {
     }
 
     public OrderDetail save(OrderDetail orderDetail) {
-        if (orderDetail.getSupply() != null) {
-            Supply supply = orderDetail.getSupply();
-            if (supply.getStock() < orderDetail.getQuantity()) {
-                throw new IllegalArgumentException("Stock insuficiente.");
-            }
-            if (supply.getStock() == 0) {
-                throw new IllegalArgumentException("El producto está agotado");
-            }
-        }
-        
-        OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail);
-        
-        if (orderDetail.getSupply() != null) {
-            Supply supply = orderDetail.getSupply();
-            supply.setStock(supply.getStock() - orderDetail.getQuantity());
-            supplyService.save(supply);
-        }
-        
-        return savedOrderDetail;
+        return orderDetailRepository.save(orderDetail);
     }
     
     public void updateQuantity(Integer orderDetailId, Integer newQuantity) {
@@ -61,22 +39,8 @@ public class OrderDetailService {
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
             .orElseThrow(() -> new IllegalArgumentException("OrderDetail no encontrado: " + orderDetailId));
         
-        Integer oldQuantity = orderDetail.getQuantity();
-        Integer quantityDifference = newQuantity - oldQuantity;
-        
-        if (orderDetail.getSupply() != null && quantityDifference > 0) {
-            Supply supply = orderDetail.getSupply();
-            if (supply.getStock() < quantityDifference) {
-                throw new IllegalArgumentException("Stock insuficiente.");
-            }
-        }
-        
         orderDetail.setQuantity(newQuantity);
         orderDetailRepository.save(orderDetail);
-        
-        if (quantityDifference != 0) {
-            updateStock(orderDetail, quantityDifference);
-        }
     }
     
     private void setAdminContext() {
@@ -93,13 +57,11 @@ public class OrderDetailService {
                         if (rs.next()) {
                             Integer userId = rs.getInt("user_id");
                             
-                            // Limpiar sesiones antiguas
                             String cleanupSql = "DELETE FROM Temp_Admin_Session WHERE created_date < SYSDATE - 1/24";
                             try (var cleanupStmt = connection.prepareStatement(cleanupSql)) {
                                 cleanupStmt.executeUpdate();
                             }
                             
-                            // Actualizar o insertar admin activo en la sesión
                             String upsertSql = "MERGE INTO Temp_Admin_Session a " +
                                              "USING (SELECT ? as username, ? as admin_user_id FROM dual) b " +
                                              "ON (a.username = b.username) " +
@@ -119,13 +81,6 @@ public class OrderDetailService {
         }
     }
     
-    private void updateStock(OrderDetail orderDetail, Integer quantityDifference) {
-        if (orderDetail.getSupply() != null) {
-            Supply supply = orderDetail.getSupply();
-            supply.setStock(supply.getStock() - quantityDifference);
-            supplyService.save(supply);
-        }
-    }
 
     public void deleteById(Integer id) {
         orderDetailRepository.deleteById(id);

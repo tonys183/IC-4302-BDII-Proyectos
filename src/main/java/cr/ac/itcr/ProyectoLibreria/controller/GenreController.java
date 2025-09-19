@@ -2,10 +2,11 @@ package cr.ac.itcr.ProyectoLibreria.controller;
 
 import cr.ac.itcr.ProyectoLibreria.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
-@RequestMapping("/images")
+@Controller
+@RequestMapping("/genres")
 public class GenreController {
 
     @Autowired

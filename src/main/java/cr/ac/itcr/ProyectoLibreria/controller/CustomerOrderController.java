@@ -7,8 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -57,9 +55,6 @@ public class CustomerOrderController {
 
     @PostMapping
     public String saveOrder(@ModelAttribute("order") CustomerOrder order) {
-        if (order.getOrderDate() == null) {
-            order.setOrderDate(new Date());
-        }
         customerOrderService.save(order);
         return "redirect:/orders";
     }
@@ -118,7 +113,6 @@ public class CustomerOrderController {
         
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setCustomerOrder(order);
-        orderDetail.setDateDetail(new Date());
         orderDetail.setQuantity(quantity);
         orderDetail.setUnitPrice(unitPrice);
         

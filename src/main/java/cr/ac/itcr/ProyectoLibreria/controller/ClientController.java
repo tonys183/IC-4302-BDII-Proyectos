@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpSession;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,6 @@ public class ClientController {
     private final OrderDetailService orderDetailService;
     private final ServiceService serviceService;
     private final ServiceTypeService serviceTypeService;
-    private final StatusService statusService;
     private final SupplyService supplyService;
 
     public ClientController(BookService bookService, CustomerOrderService customerOrderService, 
@@ -51,7 +49,6 @@ public class ClientController {
         this.orderDetailService = orderDetailService;
         this.serviceService = serviceService;
         this.serviceTypeService = serviceTypeService;
-        this.statusService = statusService;
         this.supplyService = supplyService;
     }
 
@@ -196,7 +193,6 @@ public class ClientController {
         
         OrderDetail item = new OrderDetail();
         item.setQuantity(quantity);
-        item.setDateDetail(new java.util.Date());
         
         if ("book".equals(itemType) && bookId != null) {
             Book book = bookService.findById(bookId).orElse(null);
@@ -245,14 +241,11 @@ public class ClientController {
                 
                 CustomerOrder order = new CustomerOrder();
                 order.setClient(client);
-                order.setOrderDate(new java.util.Date());
-                order.setStatus(statusService.findById(2).orElse(null));
                 
                 CustomerOrder savedOrder = customerOrderService.save(order);
                 
                 for (OrderDetail item : orderItems) {
                     item.setCustomerOrder(savedOrder);
-                    item.setDateDetail(new java.util.Date());
                     OrderDetail savedItem = orderDetailService.save(item);
                 }
                 

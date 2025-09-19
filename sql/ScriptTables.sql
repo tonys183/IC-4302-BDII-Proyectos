@@ -138,40 +138,6 @@ CREATE TABLE Temp_Admin_Session (
     created_date DATE DEFAULT SYSDATE
 );
 
-CREATE OR REPLACE TRIGGER trg_log_order_quantity
-    AFTER UPDATE OF quantity ON OrderDetail
-    FOR EACH ROW
-DECLARE
-    v_admin_user_id NUMBER;
-BEGIN
-    SELECT admin_user_id INTO v_admin_user_id FROM Temp_Admin_Session
-    WHERE created_date > SYSDATE - 1/24 AND ROWNUM = 1;
-    
-    INSERT INTO Log_Table (
-        user_id,
-        order_id,
-        action,
-        action_date,
-        current_value,
-        previous_value
-    )
-    VALUES (
-        v_admin_user_id,
-        :NEW.order_id,
-        'ADMIN UPDATE ORDER QUANTITY',
-        SYSDATE,
-        :NEW.quantity,
-        :OLD.quantity
-    );
-    
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        NULL;
-    WHEN OTHERS THEN
-        NULL;
-END;
-/
-
 DROP TABLE Temp_Admin_Session CASCADE CONSTRAINTS;
 DROP TABLE Log_Table CASCADE CONSTRAINTS;
 DROP TABLE OrderDetail CASCADE CONSTRAINTS;
