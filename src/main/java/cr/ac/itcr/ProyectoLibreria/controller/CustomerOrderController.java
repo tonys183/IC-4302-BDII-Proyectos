@@ -172,10 +172,11 @@ public class CustomerOrderController {
 
     @PostMapping("/{orderId}/details/update/{detailId}")
     public String updateOrderDetail(@PathVariable("orderId") Integer orderId,
-                                  @PathVariable("detailId") Integer detailId,
-                                  @ModelAttribute("orderDetail") OrderDetail orderDetail) {
+                                    @PathVariable("detailId") Integer detailId,
+                                    @ModelAttribute("orderDetail") OrderDetail orderDetail) {
+
         orderDetailService.updateQuantity(detailId, orderDetail.getQuantity());
+        orderDetailService.updateUnitPrice(detailId, orderDetail.getUnitPrice());
         return "redirect:/orders/" + orderId + "/details";
     }
-
 }

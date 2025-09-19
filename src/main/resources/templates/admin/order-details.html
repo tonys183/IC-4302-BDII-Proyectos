@@ -27,7 +27,7 @@
                             <select id="itemType" name="itemType" class="form-control" required onchange="showItemSelect()">
                                 <option value="">Selecciona tipo</option>
                                 <option value="book">Libro</option>
-                                <option value="supply">Suministro</option>
+                                <option value="supply">Útil</option>
                                 <option value="service">Servicio</option>
                             </select>
                         </div>
@@ -41,10 +41,10 @@
                         </div>
 
                         <div class="form-group" id="supplyGroup" style="display: none;">
-                            <label for="supplyId">Suministro</label>
+                            <label for="supplyId">Útil</label>
                             <select id="supplyId" name="supplyId" class="form-control">
-                                <option value="">Seleccione un suministro</option>
-                                <option th:each="supply : ${supplies}" th:value="${supply.supplyId}" th:text="${supply.supplyName}">Suministro</option>
+                                <option value="">Seleccione un útil</option>
+                                <option th:each="supply : ${supplies}" th:value="${supply.supplyId}" th:text="${supply.supplyName}">Útil</option>
                             </select>
                         </div>
 
@@ -91,15 +91,15 @@
                     <tr th:each="detail : ${orderDetails}">
                         <td>
                             <span th:if="${detail.book != null}" class="badge badge-book">Libro</span>
-                            <span th:if="${detail.supply != null}" class="badge badge-supply">Suministro</span>
+                            <span th:if="${detail.supply != null}" class="badge badge-supply">Útil</span>
                             <span th:if="${detail.service != null}" class="badge badge-service">Servicio</span>
                         </td>
                         <td>
                             <span th:if="${detail.book != null}" th:text="${detail.book?.bookName}">Libro</span>
-                            <span th:if="${detail.supply != null}" th:text="${detail.supply?.supplyName}">Suministro</span>
+                            <span th:if="${detail.supply != null}" th:text="${detail.supply?.supplyName}">Útil</span>
                             <span th:if="${detail.service != null}" th:text="${detail.service?.serviceName}">Servicio</span>
                         </td>
-                        <td th:text="${detail.dateDetail}">01/01/2024</td>
+                        <td th:text="${#dates.format(detail.dateDetail, 'dd/MM/yyyy')}">01/01/2024</td>
                         <td th:text="${detail.quantity}">1</td>
                         <td>₡<span th:text="${#numbers.formatDecimal(detail.unitPrice, 0, 0)}">0</span></td>
                         <td>₡<span th:text="${#numbers.formatDecimal(detail.quantity * detail.unitPrice, 0, 0)}">0</span></td>

@@ -19,14 +19,14 @@
                     <div class="form-group">
                         <label for="itemDisplay">Item:
                             <span th:if="${orderDetail.book != null}" class="badge badge-book">Libro</span>
-                            <span th:if="${orderDetail.supply != null}" class="badge badge-supply">Suministro</span>
+                            <span th:if="${orderDetail.supply != null}" class="badge badge-supply">Útil</span>
                             <span th:if="${orderDetail.service != null}" class="badge badge-service">Servicio</span>
                         </label>
 
                         <div class="form-control" id="itemDisplay" style="background-color: #2a2a2a; border: 1px solid #444; padding: 8px 12px; border-radius: 4px; margin-top: 15px;">
                             <div>
                                 <span th:if="${orderDetail.book != null}" th:text="${orderDetail.book?.bookName}">Libro</span>
-                                <span th:if="${orderDetail.supply != null}" th:text="${orderDetail.supply?.supplyName}">Suministro</span>
+                                <span th:if="${orderDetail.supply != null}" th:text="${orderDetail.supply?.supplyName}">Útil</span>
                                 <span th:if="${orderDetail.service != null}" th:text="${orderDetail.service?.serviceName}">Servicio</span>
                             </div>
                         </div>

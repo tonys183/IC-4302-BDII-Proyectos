@@ -1,11 +1,14 @@
 package cr.ac.itcr.ProyectoLibreria.service;
 
+import cr.ac.itcr.ProyectoLibreria.model.CustomerOrder;
 import cr.ac.itcr.ProyectoLibreria.model.OrderDetail;
 import cr.ac.itcr.ProyectoLibreria.repository.OrderDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.List;
@@ -32,7 +35,16 @@ public class OrderDetailService {
     public OrderDetail save(OrderDetail orderDetail) {
         return orderDetailRepository.save(orderDetail);
     }
-    
+
+    public void updateUnitPrice(Integer orderDetailId, Double newUnitPrice) {
+        setAdminContext();
+        OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
+                .orElseThrow(() -> new IllegalArgumentException("OrderDetail no encontrado: " + orderDetailId));
+
+        orderDetail.setUnitPrice(newUnitPrice);
+        orderDetailRepository.save(orderDetail);
+    }
+
     public void updateQuantity(Integer orderDetailId, Integer newQuantity) {
         setAdminContext();
         
@@ -80,11 +92,20 @@ public class OrderDetailService {
             e.printStackTrace();
         }
     }
-    
+
 
     public void deleteById(Integer id) {
-        orderDetailRepository.deleteById(id);
+        setAdminContext();
+        OrderDetail orderDetail = orderDetailRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("OrderDetail no encontrado para eliminar: " + id));
+
+        CustomerOrder customerOrder = orderDetail.getCustomerOrder();
+        if (customerOrder != null) {
+            customerOrder.getOrderDetails().remove(orderDetail);
+        }
+        orderDetailRepository.delete(orderDetail);
     }
+
 
     public List<OrderDetail> findByOrderId(Integer orderId) {
         return orderDetailRepository.findByCustomerOrderOrderId(orderId);
