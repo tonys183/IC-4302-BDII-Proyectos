@@ -41,7 +41,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         INNER JOIN Status s ON co.status_id = s.status_id
         WHERE co.order_id = p_order_id;
 
-        IF v_status_name != 'Pending' THEN
+        IF v_status_name != 'Pendiente' THEN
             DBMS_OUTPUT.PUT_LINE('No se puede eliminar el pedido con estado: ' || v_status_name);
             RETURN;
         END IF;
@@ -65,7 +65,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_modifications AS
         INNER JOIN Status s ON co.status_id = s.status_id
         WHERE co.order_id = p_order_id;
 
-        IF v_status_name != 'Pending' THEN
+        IF v_status_name != 'Pendiente' THEN
             DBMS_OUTPUT.PUT_LINE('No se puede actualizar el pedido con estado: ' || v_status_name);
             RETURN;
         END IF;
@@ -298,11 +298,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_queries AS
         SELECT COUNT(*) INTO v_order_count FROM CustomerOrder co
         INNER JOIN Client c ON co.client_id = c.client_id
         WHERE c.email = user_mail;
+        
         RETURN v_order_count;
-
-        EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-            RETURN 0;
     END getOrderCountByUser;
 
 END pkg_queries;
