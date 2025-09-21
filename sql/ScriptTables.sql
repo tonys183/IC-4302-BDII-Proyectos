@@ -103,7 +103,7 @@ CREATE TABLE OrderDetail (
     supply_id NUMBER,
     book_id NUMBER,
     service_id NUMBER,
-    date_detail DATE, 
+    date_detail DATE NOT NULL,
     quantity NUMBER NOT NULL,
     unit_price NUMBER(10,2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES CustomerOrder(order_id),

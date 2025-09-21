@@ -19,8 +19,7 @@ public class OrderDetailService {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
-    
-    
+
     @Autowired
     private DataSource dataSource;
 

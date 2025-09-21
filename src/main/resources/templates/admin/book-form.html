@@ -28,7 +28,7 @@
                 <div class="form-group">
                     <label for="publisher">Editorial</label>
                     <select id="publisher" th:field="*{publisher}" class="form-control" required>
-                        <option value="">Selecciona una editorial</option>
+                        <option value="">Seleccione una editorial</option>
                         <option th:each="publisher : ${publishers}"
                                 th:value="${publisher.publisherId}"
                                 th:text="${publisher.publisherName}">Editorial</option>
@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <label for="price">Precio (₡)</label>
-                    <input type="number" id="price" th:field="*{price}" class="form-control" min="0" step="1" required>
+                    <input type="number" id="price" th:field="*{price}" class="form-control" min="1" step="1" required >
                 </div>
 
                 <div class="form-group">
