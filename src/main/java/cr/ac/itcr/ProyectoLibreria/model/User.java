@@ -21,7 +21,6 @@ public class User {
     @Column(name = "role", nullable = false)
     private String role = "CLIENT";
 
-    // Enum para los roles disponibles
     public enum UserRole {
         ADMIN("ADMIN"),
         CLIENT("CLIENT");
