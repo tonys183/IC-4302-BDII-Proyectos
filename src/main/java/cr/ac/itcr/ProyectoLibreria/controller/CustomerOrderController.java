@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 
 @Controller
@@ -19,14 +21,6 @@ public class CustomerOrderController {
     private ClientService clientService;
     @Autowired
     private StatusService statusService;
-    @Autowired
-    private OrderDetailService orderDetailService;
-    @Autowired
-    private BookService bookService;
-    @Autowired
-    private SupplyService supplyService;
-    @Autowired
-    private ServiceService serviceService;
 
     @GetMapping
     public String listOrders(Model model, Authentication authentication) {
@@ -54,18 +48,34 @@ public class CustomerOrderController {
     }
 
     @PostMapping
-    public String saveOrder(@ModelAttribute("order") CustomerOrder order) {
-        customerOrderService.save(order);
+    public String saveOrder(@ModelAttribute("order") CustomerOrder order, RedirectAttributes redirectAttributes) {
+        try {
+            boolean isNew = order.getOrderId() == 0;
+            customerOrderService.save(order);
+            redirectAttributes.addFlashAttribute("message", isNew ? "Orden creada exitosamente" : "Orden actualizada exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar la orden");
+            if (order.getOrderId() == 0) {
+                return "redirect:/orders/new";
+            } else {
+                return "redirect:/orders/edit/" + order.getOrderId();
+            }
+        }
         return "redirect:/orders";
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model, Authentication authentication) {
-        CustomerOrder order = customerOrderService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + id));
-        model.addAttribute("order", order);
-        model.addAttribute("clients", clientService.findAll());
-        model.addAttribute("statuses", statusService.findAll());
+    public String showEditForm(@PathVariable("id") Integer id, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
+        try {
+            CustomerOrder order = customerOrderService.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + id));
+            model.addAttribute("order", order);
+            model.addAttribute("clients", clientService.findAll());
+            model.addAttribute("statuses", statusService.findAll());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al obtener la orden para editar");
+            return "redirect:/orders";
+        }
 
         boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
@@ -75,108 +85,18 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteOrder(@PathVariable("id") Integer id) {
-        customerOrderService.deleteById(id);
+    public String deleteOrder(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            customerOrderService.deleteById(id);
+            redirectAttributes.addFlashAttribute("message", "Orden eliminada exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la orden");
+        }
         return "redirect:/orders";
     }
 
-    @GetMapping("/{id}/details")
-    public String showOrderDetails(@PathVariable("id") Integer id, Model model, Authentication authentication) {
-        CustomerOrder order = customerOrderService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + id));
-        List<OrderDetail> orderDetails = orderDetailService.findByOrderId(id);
-        
-        model.addAttribute("order", order);
-        model.addAttribute("orderDetails", orderDetails);
-        model.addAttribute("books", bookService.findAll());
-        model.addAttribute("supplies", supplyService.findAll());
-        model.addAttribute("services", serviceService.findAll());
 
-        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-        model.addAttribute("isAdmin", isAdmin);
-        
-        return "admin/order-details";
-    }
 
-    @PostMapping("/{id}/details")
-    public String addOrderDetail(@PathVariable("id") Integer id, 
-                                @RequestParam("itemType") String itemType,
-                                @RequestParam(value = "bookId", required = false) Integer bookId,
-                                @RequestParam(value = "supplyId", required = false) Integer supplyId,
-                                @RequestParam(value = "serviceId", required = false) Integer serviceId,
-                                @RequestParam("quantity") Integer quantity,
-                                @RequestParam("unitPrice") Double unitPrice) {
-        
-        CustomerOrder order = customerOrderService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + id));
-        
-        OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setCustomerOrder(order);
-        orderDetail.setQuantity(quantity);
-        orderDetail.setUnitPrice(unitPrice);
-        
-        switch (itemType) {
-            case "book":
-                if (bookId != null) {
-                    Book book = bookService.findById(bookId)
-                            .orElseThrow(() -> new IllegalArgumentException("ID inválido de libro:" + bookId));
-                    orderDetail.setBook(book);
-                }
-                break;
-            case "supply":
-                if (supplyId != null) {
-                    Supply supply = supplyService.findById(supplyId)
-                            .orElseThrow(() -> new IllegalArgumentException("ID inválido de útil:" + supplyId));
-                    orderDetail.setSupply(supply);
-                }
-                break;
-            case "service":
-                if (serviceId != null) {
-                    Service service = serviceService.findById(serviceId)
-                            .orElseThrow(() -> new IllegalArgumentException("ID inválido de servicio:" + serviceId));
-                    orderDetail.setService(service);
-                }
-                break;
-        }
-        
-        orderDetailService.save(orderDetail);
-        return "redirect:/orders/" + id + "/details";
-    }
 
-    @GetMapping("/{orderId}/details/delete/{detailId}")
-    public String deleteOrderDetail(@PathVariable("orderId") Integer orderId, 
-                                   @PathVariable("detailId") Integer detailId) {
-        orderDetailService.deleteById(detailId);
-        return "redirect:/orders/" + orderId + "/details";
-    }
 
-    @GetMapping("/{orderId}/details/edit/{detailId}")
-    public String showEditOrderDetailForm(@PathVariable("orderId") Integer orderId,
-                                        @PathVariable("detailId") Integer detailId,
-                                        Model model, Authentication authentication) {
-        CustomerOrder order = customerOrderService.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("ID inválido de orden:" + orderId));
-        OrderDetail orderDetail = orderDetailService.findById(detailId)
-                .orElseThrow(() -> new IllegalArgumentException("ID inválido de detalle:" + detailId));
-        
-        model.addAttribute("order", order);
-        model.addAttribute("orderDetail", orderDetail);
-
-        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-        model.addAttribute("isAdmin", isAdmin);
-        
-        return "admin/order-detail-edit";
-    }
-
-    @PostMapping("/{orderId}/details/update/{detailId}")
-    public String updateOrderDetail(@PathVariable("orderId") Integer orderId,
-                                    @PathVariable("detailId") Integer detailId,
-                                    @ModelAttribute("orderDetail") OrderDetail orderDetail) {
-
-        orderDetailService.updateQuantity(detailId, orderDetail.getQuantity());
-        orderDetailService.updateUnitPrice(detailId, orderDetail.getUnitPrice());
-        return "redirect:/orders/" + orderId + "/details";
-    }
 }

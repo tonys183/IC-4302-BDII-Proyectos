@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -53,29 +54,50 @@ public class BookController {
     }
 
     @PostMapping
-    public String saveBook(@ModelAttribute("book") Book book) {
-        bookService.save(book);
+    public String saveBook(@ModelAttribute("book") Book book, RedirectAttributes redirectAttributes) {
+        try {
+            boolean isNew = book.getBookId() == 0;
+            bookService.save(book);
+            redirectAttributes.addFlashAttribute("message", isNew ? "Libro insertado exitosamente" : "Libro actualizado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar el libro");
+            if (book.getBookId() == 0) {
+                return "redirect:/books/new";
+            } else {
+                return "redirect:/books/edit/" + book.getBookId();
+            }
+        }
         return "redirect:/books";
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model, Authentication authentication) {
-        Book book = bookService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
-        model.addAttribute("book", book);
-        model.addAttribute("authors", authorService.findAll());
-        model.addAttribute("publishers", publisherService.findAll());
-        model.addAttribute("genres", genreService.findAll());
+    public String showEditForm(@PathVariable("id") Integer id, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
+        try {
+            Book book = bookService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
+            model.addAttribute("book", book);
+            model.addAttribute("authors", authorService.findAll());
+            model.addAttribute("publishers", publisherService.findAll());
+            model.addAttribute("genres", genreService.findAll());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al obtener el libro para editar");
+            return "redirect:/books";
+        }
 
         boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
         model.addAttribute("isAdmin", isAdmin);
-        
+
         return "admin/book-form";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteBook(@PathVariable("id") Integer id) {
-        bookService.deleteById(id);
+    public String deleteBook(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            bookService.deleteById(id);
+            redirectAttributes.addFlashAttribute("message", "Libro eliminado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el libro");
+        }
         return "redirect:/books";
     }
 }

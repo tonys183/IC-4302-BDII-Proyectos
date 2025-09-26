@@ -50,5 +50,21 @@
     </div>
 </div>
 
+<div th:replace="~{fragments :: popup}"></div>
+
+<script th:src="@{/js/popup.js}"></script>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const message = [[${message}]];
+        const errorMessage = [[${errorMessage}]];
+
+        if (message) {
+            showPopup('Éxito', message);
+        } else if (errorMessage) {
+            showPopup('Error', errorMessage);
+        }
+    });
+</script>
+
 </body>
 </html>

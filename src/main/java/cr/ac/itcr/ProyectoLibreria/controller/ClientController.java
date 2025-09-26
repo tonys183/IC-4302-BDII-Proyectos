@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -232,7 +234,7 @@ public class ClientController {
     }
 
     @GetMapping("/finalize-order")
-    public String finalizeOrder(HttpSession session, Authentication authentication) {
+    public String finalizeOrder(HttpSession session, Authentication authentication, RedirectAttributes redirectAttributes) {
         List<OrderDetail> orderItems = (List<OrderDetail>) session.getAttribute("orderItems");
         
         if (orderItems != null && !orderItems.isEmpty()) {
@@ -246,15 +248,18 @@ public class ClientController {
                 
                 for (OrderDetail item : orderItems) {
                     item.setCustomerOrder(savedOrder);
-                    OrderDetail savedItem = orderDetailService.save(item);
+                    orderDetailService.save(item);
                 }
                 
                 session.removeAttribute("orderItems");
+                redirectAttributes.addFlashAttribute("message", "¡Su orden ha sido creada exitosamente!");
             } catch (Exception e) {
-                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("errorMessage", "Hubo un error al procesar su orden. Por favor, inténtalo de nuevo.");
+                return "redirect:/catalog/create-order";
             }
         } else {
-            session.removeAttribute("orderItems");
+            redirectAttributes.addFlashAttribute("errorMessage", "No tienes items en su orden.");
+            return "redirect:/catalog/create-order";
         }
         
         return "redirect:/catalog/my-orders";

@@ -16,7 +16,7 @@ body {
 body.dark-theme {
   --bg-primary: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #0a0a0a 100%);
   --bg-secondary: rgba(255, 255, 255, 0.03);
-  --bg-card: rgba(255, 255, 255, 0.08);
+  --bg-card: #1c1c1c;
   --bg-dashboard-container: rgba(255, 255, 255, 0.05);
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
@@ -504,4 +504,60 @@ label {
 .navbar-logout .logout-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+.popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.popup-content {
+    background: #171717 !important;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 32px var(--shadow-dark);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.popup-content .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.popup-content h2 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.popup-content p {
+    color: var(--text-secondary);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
