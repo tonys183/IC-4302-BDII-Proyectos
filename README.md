@@ -1,5 +1,17 @@
 # IC-4302 — Bases de Datos II
 
+<p align="center">🗄️</p>
+
+<p align="center">
+  <img alt="Java" src="https://img.shields.io/badge/Java-ED8B00?style=flat-square">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=flat-square">
+</p>
+
+<p align="center">
+  <a href="#proyecto-i-aplicación-web-de-apoyo-para-pymes">Proyecto I</a> · <a href="#proyecto-ii-replicación-y-análisis-de-datos-de-alquiler-de-películas">Proyecto II</a> · <a href="#proyecto-iii-integración-y-análisis-de-datos-con-sparksql">Proyecto III</a>
+</p>
+
 Proyectos del curso Bases de Datos II (IC-4302), enfocados en el desarrollo de aplicaciones con bases de datos, la replicación e inteligencia de negocios y el procesamiento de datos para análisis.
 
 ## Proyecto I (Aplicación web de apoyo para PYMES)
