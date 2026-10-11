@@ -3,9 +3,10 @@
 <p align="center">🗄️</p>
 
 <p align="center">
-  <img alt="Java" src="https://img.shields.io/badge/Java-ED8B00?style=flat-square">
-  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square">
-  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=flat-square">
+  <img alt="Java" src="https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
+  <a href="LICENSE"><img alt="Licencia GPL-3.0" src="https://img.shields.io/github/license/tonys183/IC-4302-BDII-Proyectos?style=flat-square&label=Licencia&logo=opensourceinitiative&logoColor=white"></a>
 </p>
 
 <p align="center">
