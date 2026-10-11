@@ -1,7 +1,5 @@
 # IC-4302 — Bases de Datos II
 
-<p align="center">🗄️</p>
-
 <p align="center">
   <img alt="Java" src="https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white">
   <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white">
